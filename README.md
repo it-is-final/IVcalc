@@ -15,7 +15,7 @@
 Instead of using `npm run build`, use `npm start`. This will build the web application and then run `serve` on the `dist` directory. Go to the address specified by `serve`.
 
 ## Acknowledgements
- - Base stats data, as well as the stat calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)
+ - Base stats data, characteristics, natures, and stat calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)
  - Pokémon © 2002-2024 Pokémon. © 1995-2024 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo.
 
 ## License

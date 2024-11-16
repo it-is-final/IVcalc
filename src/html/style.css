@@ -1,0 +1,108 @@
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 12px;
+}
+
+select, input {
+    -ms-box-sizing:content-box;
+    -moz-box-sizing:content-box;
+    -webkit-box-sizing:content-box; 
+    box-sizing:content-box;
+    height: 1.25em;
+}
+
+
+select {
+    padding: 1px 2px;
+}
+
+th {
+    text-align: left;
+}
+
+td {
+    text-align: left;
+}
+
+table {
+    table-layout: fixed;
+    width: 200px
+}
+
+textarea#levelStatsInput {
+    padding: 1px 2px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    resize: none;
+}
+
+fieldset#settings {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5em;
+    column-gap: 0.25em;
+}
+
+div#monSettings {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    row-gap: inherit;
+    column-gap: inherit;
+}
+
+#statsInput {
+    display: flex;
+    flex-flow: column wrap;
+    row-gap: inherit;
+    column-gap: inherit;
+    justify-items: flex-start;
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+div#initialStatsInputGroup {
+    display: grid;
+    row-gap: inherit;
+    column-gap: inherit;
+    grid-template-columns: repeat(7, auto);
+    width: 100%;
+}
+
+div#levelStatsInputGroup {
+    display: flex;
+    flex-direction: row;
+    row-gap: inherit;
+    column-gap: inherit;
+    align-items: center;
+}
+
+div#levelStatsTextarea {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.statsInput {
+    display: flex;
+    flex-direction: column;
+    row-gap: inherit;
+    flex-shrink: 0;
+}  
+
+div#secondColumn {
+    width: 200px;
+}
+
+div#baseStatsGroup, div#resultsView, div#resultsView output {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 200px;
+}
+
+output {
+    margin: 0;
+    padding: 0;
+}

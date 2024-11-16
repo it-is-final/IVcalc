@@ -16,6 +16,7 @@ Instead of using `npm run build`, use `npm start`. This will build the web appli
 
 ## Acknowledgements
  - Base stats data, as well as the stat calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)
+ - Pokémon © 2002-2024 Pokémon. © 1995-2024 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo.
 
 ## License
 

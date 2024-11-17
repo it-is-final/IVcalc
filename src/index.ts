@@ -46,6 +46,7 @@ const charSelect = document.getElementById("characteristicSelector") as HTMLSele
 const hPowerSelect = document.getElementById("hiddenPowerSelector") as HTMLSelectElement;
 const statsInput = document.getElementById("levelStatsInput") as HTMLTextAreaElement;
 const considerEVsSwitch = document.getElementById("considerEVsSwitch") as HTMLInputElement;
+const diffModeSwitch = document.getElementById("diffCalcSwitch") as HTMLInputElement
 
 // Globals declarations
 
@@ -212,6 +213,10 @@ function getSetMonBaseStats(currentMonName: string, currentMonForm: string) {
     baseStatOutputs["Speed"].innerText = baseStatInputs["Speed"].value
 }
 
+function fixDiffStatsInput(_?: any) {
+    statsInput.value = statsInput.value.replace(/(?<=^)\n/gm, "");
+}
+
 window.onload = () => {
     updateFilterState(genSelect.value);
     pullFromCSV(genSelect.value)
@@ -241,8 +246,13 @@ monFormSelect.addEventListener("change", function() {
     getSetMonBaseStats(monSelect.value, this.value);
 })
 
+diffModeSwitch.addEventListener("change", fixDiffStatsInput)
+
 statsInput.addEventListener("input", function() {
-    this.value = this.value.replace(/[^0-9\s]+| {2,}| (?=\n)/,'')
+    this.value = this.value.replace(/[^0-9\s]+| {2,}| (?=\n)/,'');
+    if (diffModeSwitch.checked) {
+        fixDiffStatsInput();
+    }
 });
 
 mainForm.onsubmit = _ => false;

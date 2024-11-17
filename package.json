@@ -6,6 +6,7 @@
     "start": "npm run build && serve dist/",
     "build": "npx esbuild src/index.ts --bundle --outfile=dist/index.js && npx shx cp -r src/html/. assets dist/",
     "lint": "eslint ./src",
+    "clean": "npx shx rm -r dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

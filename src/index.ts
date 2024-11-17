@@ -46,7 +46,7 @@ const charSelect = document.getElementById("characteristicSelector") as HTMLSele
 const hPowerSelect = document.getElementById("hiddenPowerSelector") as HTMLSelectElement;
 const statsInput = document.getElementById("levelStatsInput") as HTMLTextAreaElement;
 const considerEVsSwitch = document.getElementById("considerEVsSwitch") as HTMLInputElement;
-const diffModeSwitch = document.getElementById("diffCalcSwitch") as HTMLInputElement
+const diffModeSwitch = document.getElementById("diffCalcSwitch") as HTMLInputElement;
 
 // Globals declarations
 
@@ -54,7 +54,8 @@ let monLookup: MonEntry[];
 
 function createOption(
     value: string,
-    targetList: HTMLSelectElement | HTMLDataListElement) {
+    targetList: HTMLSelectElement | HTMLDataListElement
+) {
     const option = document.createElement("option");
     option.value = value;
     option.innerText = value;
@@ -96,7 +97,9 @@ function pullFromCSV(gen: string) {
 
 function updateFilterState(gen: string) {
     const resetSelectedOptions = (options: HTMLOptionsCollection) => {
-        for (const option of options) option.selected = option.defaultSelected;
+        for (const option of options) {
+            option.selected = option.defaultSelected;
+        }
     }
     switch (gen) {
         case "3":
@@ -134,8 +137,9 @@ function updateFilterState(gen: string) {
 }
 
 function updateMonList(csvData: MonEntry[], gen: string) {
-    for (let i = monSelectList.options.length - 1; i >= 0; i--)
-        monSelectList.removeChild(monSelectList.options[i])
+    for (let i = monSelectList.options.length - 1; i >= 0; i--) {
+        monSelectList.removeChild(monSelectList.options[i]);
+    }
     let nDexThreshold: number;
     switch (gen) {
         case "3": nDexThreshold = 386; break;
@@ -163,14 +167,19 @@ function getCurrentMonForms(currentMon: string) {
         option.defaultSelected = true;
         return option;
     })();
-    for (let i = monFormSelect.options.length - 1; i >= 0; i--) monFormSelect.remove(i)
+    for (let i = monFormSelect.options.length - 1; i >= 0; i--) {
+        monFormSelect.remove(i);
+    }
     const currentMonEntries = monLookup.filter(mon => mon["Name"] === currentMon);
     if (currentMonEntries.length > 1) {
         monFormSelect.disabled = false;
         const forms = currentMonEntries.map(entry => entry["Form"]);
         for (const form of forms) {
-            if (form !== "") createOption(form, monFormSelect);
-            else monFormSelect.add(defaultOption);
+            if (form !== "") {
+                createOption(form, monFormSelect);
+            } else {
+                monFormSelect.add(defaultOption);
+            }
         }
     } else {
         monFormSelect.add(defaultOption);
@@ -179,7 +188,9 @@ function getCurrentMonForms(currentMon: string) {
 }
 
 function getSetMonBaseStats(currentMonName: string, currentMonForm: string) {
-    if (!(monLookup.map(entry => entry["Name"]).includes(currentMonName))) return;
+    if (!(monLookup.map(entry => entry["Name"]).includes(currentMonName))) {
+        return;
+    }
     const currentMon: MonEntry = monLookup.find(
         entry => (entry["Name"] === currentMonName) && (entry["Form"] === currentMonForm)
     );
@@ -190,7 +201,7 @@ function getSetMonBaseStats(currentMonName: string, currentMonForm: string) {
         "Sp.Attack": (document.getElementById("baseSpA") as HTMLInputElement),
         "Sp.Defense": (document.getElementById("baseSpD") as HTMLInputElement),
         "Speed": (document.getElementById("baseSpe") as HTMLInputElement)
-    }
+    };
     const baseStatOutputs = {
         "HP": (document.getElementById("displayBaseHP") as HTMLTableCellElement),
         "Attack": (document.getElementById("displayBaseAtk") as HTMLTableCellElement),
@@ -198,19 +209,19 @@ function getSetMonBaseStats(currentMonName: string, currentMonForm: string) {
         "Sp.Attack": (document.getElementById("displayBaseSpA") as HTMLTableCellElement),
         "Sp.Defense": (document.getElementById("displayBaseSpD") as HTMLTableCellElement),
         "Speed": (document.getElementById("displayBaseSpe") as HTMLTableCellElement)
-    }
+    };
     baseStatInputs["HP"].value = currentMon["HP"].toString();
     baseStatInputs["Attack"].value = currentMon["Attack"].toString();
     baseStatInputs["Defense"].value = currentMon["Defense"].toString();
     baseStatInputs["Sp.Attack"].value = currentMon["Sp.Attack"].toString();
     baseStatInputs["Sp.Defense"].value = currentMon["Sp.Defense"].toString();
     baseStatInputs["Speed"].value = currentMon["Speed"].toString();
-    baseStatOutputs["HP"].innerText = baseStatInputs["HP"].value
-    baseStatOutputs["Attack"].innerText = baseStatInputs["Attack"].value
-    baseStatOutputs["Defense"].innerText = baseStatInputs["Defense"].value
-    baseStatOutputs["Sp.Attack"].innerText = baseStatInputs["Sp.Attack"].value
-    baseStatOutputs["Sp.Defense"].innerText = baseStatInputs["Sp.Defense"].value
-    baseStatOutputs["Speed"].innerText = baseStatInputs["Speed"].value
+    baseStatOutputs["HP"].innerText = baseStatInputs["HP"].value;
+    baseStatOutputs["Attack"].innerText = baseStatInputs["Attack"].value;
+    baseStatOutputs["Defense"].innerText = baseStatInputs["Defense"].value;
+    baseStatOutputs["Sp.Attack"].innerText = baseStatInputs["Sp.Attack"].value;
+    baseStatOutputs["Sp.Defense"].innerText = baseStatInputs["Sp.Defense"].value;
+    baseStatOutputs["Speed"].innerText = baseStatInputs["Speed"].value;
 }
 
 function fixDiffStatsInput(_?: any) {
@@ -244,9 +255,9 @@ monSelect.addEventListener("change", function() {
 
 monFormSelect.addEventListener("change", function() {
     getSetMonBaseStats(monSelect.value, this.value);
-})
+});
 
-diffModeSwitch.addEventListener("change", fixDiffStatsInput)
+diffModeSwitch.addEventListener("change", fixDiffStatsInput);
 
 statsInput.addEventListener("input", function() {
     this.value = this.value.replace(/[^0-9\s]+| {2,}| (?=\n)/,'');
@@ -265,16 +276,16 @@ mainForm.addEventListener("submit", function() {
         "Sp.Attack": (document.getElementById("displaySpAIV") as HTMLTableCellElement),
         "Sp.Defense": (document.getElementById("displaySpDIV") as HTMLTableCellElement),
         "Speed": (document.getElementById("displaySpeIV") as HTMLTableCellElement)
-    }
-    let levelUpStats: LevelUpStats[] = []
-    let levelUpEVs: LevelUpStats[] = []
+    };
+    let levelUpStats: LevelUpStats[] = [];
+    let levelUpEVs: LevelUpStats[] = [];
     const formData = new FormData(this);
     const data = Object.fromEntries(formData);
     const considerEVs = data["considerEVs"] !== undefined;
     const exactMode = data["calcMode"] === "exact";
     const rawLevelUpStats = data["levelStats"].toString().split("\n")
                             .map(level => level.split(' ').map(stat => parseInt(stat)));
-    let level = parseInt(data["initialLevel"].toString())
+    let level = parseInt(data["initialLevel"].toString());
     levelUpStats.push(
         {
             "Level": level,
@@ -296,17 +307,19 @@ mainForm.addEventListener("submit", function() {
             "Sp.Defense": considerEVs ? parseInt(data["initialSpDEV"].toString()) : 0,
             "Speed": considerEVs ? parseInt(data["initialSpeEV"].toString()) : 0
         }
-    )
+    );
     for (const levelStat of rawLevelUpStats) {
         ++level;
         const getPrevStat = (stat: Stat) => (
             levelUpStats[levelUpStats.length - 1][stat]
-        )
-        if (levelStat.length === 1 && levelStat.includes(NaN)) continue;
+        );
+        if (levelStat.length === 1 && levelStat.includes(NaN)) { 
+            continue;
+        }
         if (levelStat.length !== (considerEVs ? 12 : 6)) {
             alert("Input is incorrectly formatted, please fix this.");
             return;
-        }
+        };
         levelUpStats.push(
             {
                 "Level": level,
@@ -317,7 +330,7 @@ mainForm.addEventListener("submit", function() {
                 "Sp.Defense": exactMode ? levelStat[4] : getPrevStat("Sp.Defense") + levelStat[4],
                 "Speed": exactMode ? levelStat[5] : getPrevStat("Speed") + levelStat[5]
             }
-        )
+        );
         levelUpEVs.push(
             {
                 "Level": level,
@@ -328,7 +341,7 @@ mainForm.addEventListener("submit", function() {
                 "Sp.Defense": considerEVs ? levelStat[10] : 0,
                 "Speed": considerEVs ? levelStat[11] : 0
             }
-        )
+        );
     }
     const [hpIVRange, atkIVRange, defIVRange, spaIVRange, spdIVRange, speIVRange] = calculateIVs(
         {
@@ -344,13 +357,13 @@ mainForm.addEventListener("submit", function() {
         data["nature"].toString(),
         (data["characteristic"] !== undefined ? data["characteristic"].toString() : ""),
         (data["hiddenPower"] !== undefined ? data["hiddenPower"].toString() : "")
-    )
-    displayIVs["HP"].innerText = hpIVRange.join(", ")
-    displayIVs["Attack"].innerText = atkIVRange.join(", ")
-    displayIVs["Defense"].innerText = defIVRange.join(", ")
-    displayIVs["Sp.Attack"].innerText = spaIVRange.join(", ")
-    displayIVs["Sp.Defense"].innerText = spdIVRange.join(", ")
-    displayIVs["Speed"].innerText = speIVRange.join(", ")
+    );
+    displayIVs["HP"].innerText = hpIVRange.join(", ");
+    displayIVs["Attack"].innerText = atkIVRange.join(", ");
+    displayIVs["Defense"].innerText = defIVRange.join(", ");
+    displayIVs["Sp.Attack"].innerText = spaIVRange.join(", ");
+    displayIVs["Sp.Defense"].innerText = spdIVRange.join(", ");
+    displayIVs["Speed"].innerText = speIVRange.join(", ");
 });
 
 considerEVsSwitch.addEventListener("change", function() {

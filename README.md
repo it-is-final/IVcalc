@@ -1,4 +1,5 @@
 # IVcalc
+This is a tool that can calculate the IVs of your Pokémon.
 
 ## Build Instructions
 
@@ -13,6 +14,9 @@
 
 ### Run the application locally
 Instead of using `npm run build`, use `npm start`. This will build the web application and then run `serve` on the `dist` directory. Go to the address specified by `serve`.
+
+## Support
+Use the [issue tracker](https://github.com/kaitouctr/IVcalc/issues) for bug reports, feature requests or enhancements. For just questions or "tech support", use [GitHub Discussions](https://github.com/kaitouctr/IVcalc/discussions).
 
 ## Acknowledgements
  - Base stats data, characteristics data, natures data, and stat calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)

@@ -19,7 +19,7 @@ Instead of using `npm run build`, use `npm start`. This will build the web appli
 Use the [issue tracker](https://github.com/kaitouctr/IVcalc/issues) for bug reports, feature requests or enhancements. For just questions or "tech support", use [GitHub Discussions](https://github.com/kaitouctr/IVcalc/discussions).
 
 ## Acknowledgements
- - Base stats data, characteristics data, natures data, and stat calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)
+ - Base stats data, characteristics data, natures data, and calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)
  - Pokémon © 2002-2024 Pokémon. © 1995-2024 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo.
 
 ## License

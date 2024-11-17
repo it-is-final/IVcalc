@@ -113,27 +113,95 @@ const Characteristics = Object.freeze({
     "Somewhat stubborn": {"Stat": "Sp.Defense", "IVs": [4, 9, 14, 19, 24, 29]}
 })
 
-const hpStatCalcFormula = (baseStat: number, iv: number, ev: number, level: number) => (
-    Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
-);
+function narrowHPIVRange(
+    baseStat: number,
+    ev: number,
+    level: number,
+    stat: number,
+    ivRange: number[]
+) {
+    return ivRange.filter(iv =>
+        Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
+    === stat)
+}
 
-const otherStatCalcFormula = (baseStat: number, iv: number, ev: number, level: number, nature: number) => (
-    Math.floor((Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5) * nature)
-);
-
-const guessHPIV = (baseStat: number, ev: number, level: number, stat: number, ivRange: number[]) => (
-    ivRange.filter(iv => hpStatCalcFormula(baseStat, iv, ev, level) === stat)
-)
-
-const guessOtherIV = (
+function narrowIVRange(
     baseStat: number,
     ev: number,
     level: number,
     nature: number,
     stat: number,
-    ivRange: number[]) => (
-    ivRange.filter(iv => otherStatCalcFormula(baseStat, iv, ev, level, nature) === stat)
-)
+    ivRange: number[]
+) {
+    return ivRange.filter(iv =>
+        Math.floor((Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5) * nature)
+    === stat)
+}
+
+function narrowByHiddenPower(
+    hpIVRange: number[],
+    atkIVRange: number[],
+    defIVRange: number[],
+    speIVRange: number[],
+    spaIVRange: number[],
+    spdIVRange: number[],
+    targetHPType: string
+) {
+    const TYPES = {
+        0: "Fighting",
+        1: "Flying",
+        2: "Poison",
+        3: "Ground",
+        4: "Rock",
+        5: "Bug",
+        6: "Ghost",
+        7: "Steel",
+        8: "Fire",
+        9: "Water",
+        10: "Grass",
+        11: "Electric",
+        12: "Psychic",
+        13: "Ice",
+        14: "Dragon",
+        15: "Dark"
+    }
+    const hpRange: Set<number> = new Set();
+    const atkRange: Set<number> = new Set();
+    const defRange: Set<number> = new Set();
+    const speRange: Set<number> = new Set();
+    const spaRange: Set<number> = new Set();
+    const spdRange: Set<number> = new Set();
+    /*
+     *  Below loops through all possible combinations of LSBs of the
+     *  six stats. This creates a lookup table on the fly for 
+     *  a specific hidden power.
+    */
+    for (const hpLSB of [0, 1])
+    for (const atkLSB of [0, 1])
+    for (const defLSB of [0, 1])
+    for (const speLSB of [0, 1])
+    for (const spaLSB of [0, 1])
+    for (const spdLSB of [0, 1]) {
+        const hpType = Math.floor(
+            ((hpLSB + 2 * atkLSB + 4 * defLSB + 8 * speLSB + 16 * spaLSB + 32 * spdLSB) * 15) / 63
+        )
+        if (!(TYPES[hpType] === targetHPType)) continue;
+        hpRange.add(hpLSB);
+        atkRange.add(atkLSB);
+        defRange.add(defLSB);
+        speRange.add(speLSB);
+        spaRange.add(spaLSB);
+        spdRange.add(spdLSB);
+    }
+    return [
+        hpIVRange.filter(iv => hpRange.has(iv & 1)),
+        atkIVRange.filter(iv => atkRange.has(iv & 1)),
+        defIVRange.filter(iv => defRange.has(iv & 1)),
+        speIVRange.filter(iv => speRange.has(iv & 1)),
+        spaIVRange.filter(iv => spaRange.has(iv & 1)),
+        spdIVRange.filter(iv => spdRange.has(iv & 1))
+    ]
+}
 
 export function calculateIVs(
     baseStats: BaseStats,
@@ -141,61 +209,121 @@ export function calculateIVs(
     levelUpEVs: LevelUpStats[],
     natureInput: string,
     characteristicInput: string,
-    hiddenPower: string) {
-    let hpIVRange = [...Array(32).keys()];
-    let atkIVRange = [...Array(32).keys()];
-    let defIVRange = [...Array(32).keys()];
-    let spaIVRange = [...Array(32).keys()];
-    let spdIVRange = [...Array(32).keys()];
-    let speIVRange = [...Array(32).keys()];
+    hiddenPower: string
+) {
+    const hpIVRange = [...Array(32).keys()];
+    const atkIVRange = [...Array(32).keys()];
+    const defIVRange = [...Array(32).keys()];
+    const spaIVRange = [...Array(32).keys()];
+    const spdIVRange = [...Array(32).keys()];
+    const speIVRange = [...Array(32).keys()];
+    const checkIVMembership = (
+        arr: number[],
+        l: number[]
+    ) => {
+        for (let i = arr.length - 1; i >= 0; i--) {
+            if (!l.includes(arr[i])) {
+                arr.splice(i, 1)
+            }
+        }
+    }
     if (characteristicInput !== "" && characteristicInput in Characteristics) {
         const characteristic: Characteristic = Characteristics[characteristicInput]
         switch(characteristic["Stat"]) {
-            case "HP": hpIVRange = characteristic["IVs"]; break;
-            case "Attack": atkIVRange = characteristic["IVs"]; break;
-            case "Defense": defIVRange = characteristic["IVs"]; break;
-            case "Sp.Attack": spaIVRange = characteristic["IVs"]; break;
-            case "Sp.Defense": spdIVRange = characteristic["IVs"]; break;
-            case "Speed": speIVRange = characteristic["IVs"]; break;
+            case "HP":
+                checkIVMembership(hpIVRange, characteristic["IVs"])
+                break;
+            case "Attack":
+                checkIVMembership(atkIVRange, characteristic["IVs"])
+                break;
+            case "Defense":
+                checkIVMembership(defIVRange, characteristic["IVs"])
+                break;
+            case "Sp.Attack":
+                checkIVMembership(spaIVRange, characteristic["IVs"])
+                break;
+            case "Sp.Defense":
+                checkIVMembership(spdIVRange, characteristic["IVs"])
+                break;
+            case "Speed":
+                checkIVMembership(speIVRange, characteristic["IVs"])
+                break;
         }
+    }
+    if (hiddenPower !== "") {
+        const results = narrowByHiddenPower(
+            hpIVRange,
+            atkIVRange,
+            defIVRange,
+            speIVRange,
+            spaIVRange,
+            spdIVRange,
+            hiddenPower
+        )
+        checkIVMembership(hpIVRange, results[0]);
+        checkIVMembership(atkIVRange, results[1]);
+        checkIVMembership(defIVRange, results[2]);
+        checkIVMembership(speIVRange, results[3]);
+        checkIVMembership(spaIVRange, results[4]);
+        checkIVMembership(spdIVRange, results[5]);
     }
     const natureModifier: NatureModifiers = Natures[natureInput];
     for (const [statLevel, evLevel] of levelUpStats.map((level, idx) => [level, levelUpEVs[idx]])) {
-        hpIVRange = guessHPIV(baseStats["HP"],
-                              evLevel["HP"],
-                              statLevel["Level"],
-                              statLevel["HP"],
-                              hpIVRange);
-        atkIVRange = guessOtherIV(baseStats["Attack"],
-                              evLevel["Attack"],
-                              statLevel["Level"],
-                              natureModifier["Attack"],
-                              statLevel["Attack"],
-                              atkIVRange);
-        defIVRange = guessOtherIV(baseStats["Defense"],
-                              evLevel["Defense"],
-                              statLevel["Level"],
-                              natureModifier["Defense"],
-                              statLevel["Defense"],
-                              defIVRange);
-        spaIVRange = guessOtherIV(baseStats["Sp.Attack"],
-                              evLevel["Sp.Attack"],
-                              statLevel["Level"],
-                              natureModifier["Sp.Attack"],
-                              statLevel["Sp.Attack"],
-                              spaIVRange);
-        spdIVRange = guessOtherIV(baseStats["Sp.Defense"],
-                              evLevel["Sp.Defense"],
-                              statLevel["Level"],
-                              natureModifier["Sp.Defense"],
-                              statLevel["Sp.Defense"],
-                              spdIVRange);
-        speIVRange = guessOtherIV(baseStats["Speed"],
-                              evLevel["Speed"],
-                              statLevel["Level"],
-                              natureModifier["Speed"],
-                              statLevel["Speed"],
-                              speIVRange);
+        const results = [
+            narrowHPIVRange(
+                baseStats["HP"],
+                evLevel["HP"],
+                statLevel["Level"],
+                statLevel["HP"],
+                hpIVRange
+            ),
+            narrowIVRange(
+                baseStats["Attack"],
+                evLevel["Attack"],
+                statLevel["Level"],
+                natureModifier["Attack"],
+                statLevel["Attack"],
+                atkIVRange
+            ),
+            narrowIVRange(
+                baseStats["Defense"],
+                evLevel["Defense"],
+                statLevel["Level"],
+                natureModifier["Defense"],
+                statLevel["Defense"],
+                defIVRange
+            ),
+            narrowIVRange(
+                baseStats["Sp.Attack"],
+                evLevel["Sp.Attack"],
+                statLevel["Level"],
+                natureModifier["Sp.Attack"],
+                statLevel["Sp.Attack"],
+                spaIVRange
+            ),
+            narrowIVRange(
+                baseStats["Sp.Defense"],
+                evLevel["Sp.Defense"],
+                statLevel["Level"],
+                natureModifier["Sp.Defense"],
+                statLevel["Sp.Defense"],
+                spdIVRange
+            ),
+            narrowIVRange(
+                baseStats["Speed"],
+                evLevel["Speed"],
+                statLevel["Level"],
+                natureModifier["Speed"],
+                statLevel["Speed"],
+                speIVRange
+            )
+        ]
+        checkIVMembership(hpIVRange, results[0]);
+        checkIVMembership(atkIVRange, results[1]);
+        checkIVMembership(defIVRange, results[2]);
+        checkIVMembership(spaIVRange, results[3]);
+        checkIVMembership(spdIVRange, results[4]);
+        checkIVMembership(speIVRange, results[5]);
     }
     return [hpIVRange, atkIVRange, defIVRange, spaIVRange, spdIVRange, speIVRange]
 }

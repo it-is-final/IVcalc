@@ -18,7 +18,7 @@
 
 "use strict"
 
-export type Stat = "HP" | "Attack" | "Defense" | "Sp.Attack" | "Sp.Defense" | "Speed"
+export type Stat = "HP" | "Attack" | "Defense" | "Sp.Attack" | "Sp.Defense" | "Speed";
 
 interface BaseStats {
     "HP": number,
@@ -27,7 +27,7 @@ interface BaseStats {
     "Sp.Attack": number,
     "Sp.Defense": number,
     "Speed": number
-}
+};
 
 export interface LevelUpStats {
     "Level": number,
@@ -37,12 +37,12 @@ export interface LevelUpStats {
     "Sp.Attack": number,
     "Sp.Defense": number,
     "Speed": number
-}
+};
 
 interface Characteristic {
     "Stat": Stat,
     "IVs": number[]
-}
+};
 
 interface NatureModifiers {
     "Attack": 0.9 | 1.0 | 1.1,
@@ -50,7 +50,7 @@ interface NatureModifiers {
     "Speed": 0.9 | 1.0 | 1.1,
     "Sp.Attack": 0.9 | 1.0 | 1.1,
     "Sp.Defense": 0.9 | 1.0 | 1.1
-}
+};
 
 const Natures = Object.freeze({
     "Hardy": {"Attack": 1.0, "Defense": 1.0, "Speed": 1.0, "Sp.Attack": 1.0, "Sp.Defense": 1.0},
@@ -78,7 +78,7 @@ const Natures = Object.freeze({
     "Sassy": {"Attack": 1.0, "Defense": 1.0, "Speed": 0.9, "Sp.Attack": 1.0, "Sp.Defense": 1.1},
     "Careful": {"Attack": 1.0, "Defense": 1.0, "Speed": 1.0, "Sp.Attack": 0.9, "Sp.Defense": 1.1},
     "Quirky": {"Attack": 1.0, "Defense": 1.0, "Speed": 1.0, "Sp.Attack": 1.0, "Sp.Defense": 1.0}
-})
+});
 
 const Characteristics = Object.freeze({
     "Loves to eat": {"Stat": "HP", "IVs": [0, 5, 10, 15, 20, 25, 30]},
@@ -111,7 +111,7 @@ const Characteristics = Object.freeze({
     "Quick to flee": {"Stat": "Speed", "IVs": [4, 9, 14, 19, 24, 29]},
     "Very finicky": {"Stat": "Sp.Attack", "IVs": [4, 9, 14, 19, 24, 29]},
     "Somewhat stubborn": {"Stat": "Sp.Defense", "IVs": [4, 9, 14, 19, 24, 29]}
-})
+});
 
 function narrowHPIVRange(
     baseStat: number,
@@ -122,7 +122,7 @@ function narrowHPIVRange(
 ) {
     return ivRange.filter(iv =>
         Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + level + 10
-    === stat)
+    === stat);
 }
 
 function narrowIVRange(
@@ -135,7 +135,7 @@ function narrowIVRange(
 ) {
     return ivRange.filter(iv =>
         Math.floor((Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5) * nature)
-    === stat)
+    === stat);
 }
 
 function narrowByHiddenPower(
@@ -164,7 +164,7 @@ function narrowByHiddenPower(
         13: "Ice",
         14: "Dragon",
         15: "Dark"
-    }
+    };
     const hpRange: Set<number> = new Set();
     const atkRange: Set<number> = new Set();
     const defRange: Set<number> = new Set();
@@ -200,7 +200,7 @@ function narrowByHiddenPower(
         speIVRange.filter(iv => speRange.has(iv & 1)),
         spaIVRange.filter(iv => spaRange.has(iv & 1)),
         spdIVRange.filter(iv => spdRange.has(iv & 1))
-    ]
+    ];
 }
 
 export function calculateIVs(
@@ -223,7 +223,7 @@ export function calculateIVs(
     ) => {
         for (let i = arr.length - 1; i >= 0; i--) {
             if (!l.includes(arr[i])) {
-                arr.splice(i, 1)
+                arr.splice(i, 1);
             }
         }
     }
@@ -294,7 +294,7 @@ export function calculateIVs(
                 statLevel["Speed"],
                 speIVRange
             )
-        ]
+        ];
         checkIVMembership(hpIVRange, results[0]);
         checkIVMembership(atkIVRange, results[1]);
         checkIVMembership(defIVRange, results[2]);
@@ -303,27 +303,27 @@ export function calculateIVs(
         checkIVMembership(speIVRange, results[5]);
     }
     if (characteristicInput !== "" && characteristicInput in Characteristics) {
-        const characteristic: Characteristic = Characteristics[characteristicInput]
+        const characteristic: Characteristic = Characteristics[characteristicInput];
         switch(characteristic["Stat"]) {
             case "HP":
-                checkIVMembership(hpIVRange, characteristic["IVs"])
+                checkIVMembership(hpIVRange, characteristic["IVs"]);
                 break;
             case "Attack":
-                checkIVMembership(atkIVRange, characteristic["IVs"])
+                checkIVMembership(atkIVRange, characteristic["IVs"]);
                 break;
             case "Defense":
-                checkIVMembership(defIVRange, characteristic["IVs"])
+                checkIVMembership(defIVRange, characteristic["IVs"]);
                 break;
             case "Sp.Attack":
-                checkIVMembership(spaIVRange, characteristic["IVs"])
+                checkIVMembership(spaIVRange, characteristic["IVs"]);
                 break;
             case "Sp.Defense":
-                checkIVMembership(spdIVRange, characteristic["IVs"])
+                checkIVMembership(spdIVRange, characteristic["IVs"]);
                 break;
             case "Speed":
-                checkIVMembership(speIVRange, characteristic["IVs"])
+                checkIVMembership(speIVRange, characteristic["IVs"]);
                 break;
         }
     }
-    return [hpIVRange, atkIVRange, defIVRange, spaIVRange, spdIVRange, speIVRange]
+    return [hpIVRange, atkIVRange, defIVRange, spaIVRange, spdIVRange, speIVRange];
 }

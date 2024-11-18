@@ -359,12 +359,18 @@ mainForm.addEventListener("submit", function() {
         (data["characteristic"] !== undefined ? data["characteristic"].toString() : ""),
         (data["hiddenPower"] !== undefined ? data["hiddenPower"].toString() : "")
     );
-    displayIVs["HP"].innerText = hpIVRange.join(", ");
-    displayIVs["Attack"].innerText = atkIVRange.join(", ");
-    displayIVs["Defense"].innerText = defIVRange.join(", ");
-    displayIVs["Sp.Attack"].innerText = spaIVRange.join(", ");
-    displayIVs["Sp.Defense"].innerText = spdIVRange.join(", ");
-    displayIVs["Speed"].innerText = speIVRange.join(", ");
+    displayIVs["HP"].innerText
+    = (hpIVRange.length > 0) ? hpIVRange.join(", ") : "Invalid";
+    displayIVs["Attack"].innerText
+    = (atkIVRange.length > 0) ? atkIVRange.join(", ") : "Invalid";
+    displayIVs["Defense"].innerText
+    = (defIVRange.length > 0) ? defIVRange.join(", ") : "Invalid";
+    displayIVs["Sp.Attack"].innerText
+    = (spaIVRange.length > 0) ? spaIVRange.join(", ") : "Invalid";
+    displayIVs["Sp.Defense"].innerText
+    = (spdIVRange.length > 0) ? spdIVRange.join(", ") : "Invalid";
+    displayIVs["Speed"].innerText
+    = (speIVRange.length > 0) ? speIVRange.join(", ") : "Invalid";
 });
 
 considerEVsSwitch.addEventListener("change", function() {

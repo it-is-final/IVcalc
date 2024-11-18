@@ -227,29 +227,6 @@ export function calculateIVs(
             }
         }
     }
-    if (characteristicInput !== "" && characteristicInput in Characteristics) {
-        const characteristic: Characteristic = Characteristics[characteristicInput]
-        switch(characteristic["Stat"]) {
-            case "HP":
-                checkIVMembership(hpIVRange, characteristic["IVs"])
-                break;
-            case "Attack":
-                checkIVMembership(atkIVRange, characteristic["IVs"])
-                break;
-            case "Defense":
-                checkIVMembership(defIVRange, characteristic["IVs"])
-                break;
-            case "Sp.Attack":
-                checkIVMembership(spaIVRange, characteristic["IVs"])
-                break;
-            case "Sp.Defense":
-                checkIVMembership(spdIVRange, characteristic["IVs"])
-                break;
-            case "Speed":
-                checkIVMembership(speIVRange, characteristic["IVs"])
-                break;
-        }
-    }
     if (hiddenPower !== "") {
         const results = narrowByHiddenPower(
             hpIVRange,
@@ -324,6 +301,29 @@ export function calculateIVs(
         checkIVMembership(spaIVRange, results[3]);
         checkIVMembership(spdIVRange, results[4]);
         checkIVMembership(speIVRange, results[5]);
+    }
+    if (characteristicInput !== "" && characteristicInput in Characteristics) {
+        const characteristic: Characteristic = Characteristics[characteristicInput]
+        switch(characteristic["Stat"]) {
+            case "HP":
+                checkIVMembership(hpIVRange, characteristic["IVs"])
+                break;
+            case "Attack":
+                checkIVMembership(atkIVRange, characteristic["IVs"])
+                break;
+            case "Defense":
+                checkIVMembership(defIVRange, characteristic["IVs"])
+                break;
+            case "Sp.Attack":
+                checkIVMembership(spaIVRange, characteristic["IVs"])
+                break;
+            case "Sp.Defense":
+                checkIVMembership(spdIVRange, characteristic["IVs"])
+                break;
+            case "Speed":
+                checkIVMembership(speIVRange, characteristic["IVs"])
+                break;
+        }
     }
     return [hpIVRange, atkIVRange, defIVRange, spaIVRange, spdIVRange, speIVRange]
 }

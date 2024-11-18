@@ -189,6 +189,7 @@ function getCurrentMonForms(currentMon: string) {
 
 function getSetMonBaseStats(currentMonName: string, currentMonForm: string) {
     if (!(monLookup.map(entry => entry["Name"]).includes(currentMonName))) {
+        alert("Not a valid Pokémon.");
         return;
     }
     const currentMon: MonEntry = monLookup.find(

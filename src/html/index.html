@@ -1,263 +1,517 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>IV Calculator</title>
-    <link rel="stylesheet" href="normalize.css" />
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="normalize.css"
+    />
+    <link
+      rel="stylesheet"
+      href="style.css"
+    />
+  </head>
+  <body>
     <main>
-        <form id="mainForm" action="" method="post">
-            <fieldset id="settings" form="mainForm">
-                <legend>Settings</legend>
-                <div id="monSettings">
-                    <label for="generationSelector">Generation</label>
-                    <label for="monSelector">Pokémon</label>
-                    <label for="regionalSelector">Form</label>
-                    <select id="generationSelector" name="generation">
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                    </select>
-                    <input id="monSelector" type="text" list="monList" spellcheck="false">
-                    <datalist id="monList">
-                        <!-- Species goes here -->
-                    </datalist>
-                    <select id="regionalSelector" name="form">
-                        <!-- Species forms go here if they have any-->
-                    </select>
-                    <label for="natureSelector">Nature</label>
-                    <label for="characteristicSelector">Characteristic</label>
-                    <label for="hiddenPowerSelector">Hidden Power</label>
-                    <select id="natureSelector" name="nature">
-                        <option>Hardy</option>
-                        <option>Lonely</option>
-                        <option>Brave</option>
-                        <option>Adamant</option>
-                        <option>Naughty</option>
-                        <option>Bold</option>
-                        <option>Docile</option>
-                        <option>Relaxed</option>
-                        <option>Impish</option>
-                        <option>Lax</option>
-                        <option>Timid</option>
-                        <option>Hasty</option>
-                        <option>Serious</option>
-                        <option>Jolly</option>
-                        <option>Naive</option>
-                        <option>Modest</option>
-                        <option>Mild</option>
-                        <option>Quiet</option>
-                        <option>Bashful</option>
-                        <option>Rash</option>
-                        <option>Calm</option>
-                        <option>Gentle</option>
-                        <option>Sassy</option>
-                        <option>Careful</option>
-                        <option>Quirky</option>
-                    </select>
-                    <select id="characteristicSelector" name="characteristic">
-                        <option value="">–</option>
-                        <option>Loves to eat</option>
-                        <option>Proud of its power</option>
-                        <option>Sturdy body</option>
-                        <option>Likes to run</option>
-                        <option>Highly curious</option>
-                        <option>Strong willed</option>
-                        <option value="Takes plenty of siestas" 
-                        title="Takes plenty of siestas (VI+) Often dozes off (IV-V)">
-                        Takes plenty of siestas</option>
-                        <option>Likes to thrash about</option>
-                        <option>Capable of taking hits</option>
-                        <option>Alert to sounds</option>
-                        <option>Mischievous</option>
-                        <option>Somewhat vain</option>
-                        <option value="Nods off a lot" 
-                        title="Nods off a lot (VI+) Often scatters things (IV-V)"
-                        >Nods off a lot</option>
-                        <option>A little quick tempered</option>
-                        <option>Highly persistent</option>
-                        <option>Impetuous and silly</option>
-                        <option>Thoroughly cunning</option>
-                        <option>Strongly defiant</option>
-                        <option>Scatters things often</option>
-                        <option>Likes to fight</option>
-                        <option>Good endurance</option>
-                        <option>Somewhat of a clown</option>
-                        <option>Often lost in thought</option>
-                        <option>Hates to lose</option>
-                        <option>Likes to relax</option>
-                        <option>Quick tempered</option>
-                        <option>Good perseverance</option>
-                        <option>Quick to flee</option>
-                        <option>Very finicky</option>
-                        <option>Somewhat stubborn</option>
-                    </select>
-                    <select id="hiddenPowerSelector" name="hiddenPower">
-                        <option value="">–</option>
-                        <option>Fighting</option>
-                        <option>Flying</option>
-                        <option>Poison</option>
-                        <option>Ground</option>
-                        <option>Rock</option>
-                        <option>Bug</option>
-                        <option>Ghost</option>
-                        <option>Steel</option>
-                        <option>Fire</option>
-                        <option>Water</option>
-                        <option>Grass</option>
-                        <option>Electric</option>
-                        <option>Psychic</option>
-                        <option>Ice</option>
-                        <option>Dragon</option>
-                        <option>Dark</option>
-                    </select>
-                </div>
-                <fieldset id="statsInput">
-                    <div id="initialStatsInputGroup" class="statsInput">
-                        <label for="initialLevel">Level</label>
-                        <label for="initialHP">HP</label>
-                        <label for="initialAtk">Attack</label>
-                        <label for="initialDef">Defense</label>
-                        <label for="initialSpA">Sp.Atk</label>
-                        <label for="initialSpD">Sp.Def</label>
-                        <label for="initialSpe">Speed</label>
-                        <input id="initialLevel" type="number" min="1" max="100" name="initialLevel" required/>
-                        <!-- Maximum possible HP from this formula: 
+      <form
+        id="mainForm"
+        action=""
+        method="post"
+      >
+        <fieldset
+          id="settings"
+          form="mainForm"
+        >
+          <legend>Settings</legend>
+          <div id="monSettings">
+            <label for="generationSelector">Generation</label>
+            <label for="monSelector">Pokémon</label>
+            <label for="regionalSelector">Form</label>
+            <select
+              id="generationSelector"
+              name="generation"
+            >
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+            </select>
+            <input
+              id="monSelector"
+              type="text"
+              list="monList"
+              spellcheck="false"
+            />
+            <datalist id="monList">
+              <!-- Species goes here -->
+            </datalist>
+            <select
+              id="regionalSelector"
+              name="form"
+            >
+              <!-- Species forms go here if they have any-->
+            </select>
+            <label for="natureSelector">Nature</label>
+            <label for="characteristicSelector">Characteristic</label>
+            <label for="hiddenPowerSelector">Hidden Power</label>
+            <select
+              id="natureSelector"
+              name="nature"
+            >
+              <option>Hardy</option>
+              <option>Lonely</option>
+              <option>Brave</option>
+              <option>Adamant</option>
+              <option>Naughty</option>
+              <option>Bold</option>
+              <option>Docile</option>
+              <option>Relaxed</option>
+              <option>Impish</option>
+              <option>Lax</option>
+              <option>Timid</option>
+              <option>Hasty</option>
+              <option>Serious</option>
+              <option>Jolly</option>
+              <option>Naive</option>
+              <option>Modest</option>
+              <option>Mild</option>
+              <option>Quiet</option>
+              <option>Bashful</option>
+              <option>Rash</option>
+              <option>Calm</option>
+              <option>Gentle</option>
+              <option>Sassy</option>
+              <option>Careful</option>
+              <option>Quirky</option>
+            </select>
+            <select
+              id="characteristicSelector"
+              name="characteristic"
+            >
+              <option value="">–</option>
+              <option>Loves to eat</option>
+              <option>Proud of its power</option>
+              <option>Sturdy body</option>
+              <option>Likes to run</option>
+              <option>Highly curious</option>
+              <option>Strong willed</option>
+              <option
+                value="Takes plenty of siestas"
+                title="Takes plenty of siestas (VI+) Often dozes off (IV-V)"
+              >
+                Takes plenty of siestas
+              </option>
+              <option>Likes to thrash about</option>
+              <option>Capable of taking hits</option>
+              <option>Alert to sounds</option>
+              <option>Mischievous</option>
+              <option>Somewhat vain</option>
+              <option
+                value="Nods off a lot"
+                title="Nods off a lot (VI+) Often scatters things (IV-V)"
+              >
+                Nods off a lot
+              </option>
+              <option>A little quick tempered</option>
+              <option>Highly persistent</option>
+              <option>Impetuous and silly</option>
+              <option>Thoroughly cunning</option>
+              <option>Strongly defiant</option>
+              <option>Scatters things often</option>
+              <option>Likes to fight</option>
+              <option>Good endurance</option>
+              <option>Somewhat of a clown</option>
+              <option>Often lost in thought</option>
+              <option>Hates to lose</option>
+              <option>Likes to relax</option>
+              <option>Quick tempered</option>
+              <option>Good perseverance</option>
+              <option>Quick to flee</option>
+              <option>Very finicky</option>
+              <option>Somewhat stubborn</option>
+            </select>
+            <select
+              id="hiddenPowerSelector"
+              name="hiddenPower"
+            >
+              <option value="">–</option>
+              <option>Fighting</option>
+              <option>Flying</option>
+              <option>Poison</option>
+              <option>Ground</option>
+              <option>Rock</option>
+              <option>Bug</option>
+              <option>Ghost</option>
+              <option>Steel</option>
+              <option>Fire</option>
+              <option>Water</option>
+              <option>Grass</option>
+              <option>Electric</option>
+              <option>Psychic</option>
+              <option>Ice</option>
+              <option>Dragon</option>
+              <option>Dark</option>
+            </select>
+          </div>
+          <fieldset id="statsInput">
+            <div
+              id="initialStatsInputGroup"
+              class="statsInput"
+            >
+              <label for="initialLevel">Level</label>
+              <label for="initialHP">HP</label>
+              <label for="initialAtk">Attack</label>
+              <label for="initialDef">Defense</label>
+              <label for="initialSpA">Sp.Atk</label>
+              <label for="initialSpD">Sp.Def</label>
+              <label for="initialSpe">Speed</label>
+              <input
+                id="initialLevel"
+                type="number"
+                min="1"
+                max="100"
+                name="initialLevel"
+                required
+              />
+              <!-- Maximum possible HP from this formula: 
                          (⌊(2 ✕ 255 + 31 + ⌊252 ÷ 4⌋) ✕ 100) ÷ 100⌋ + 100 + 10 = 714 -->
-                        <input id="initialHP" type="number" min="1" max="714" name="initialHP" required/>
-                        <!-- Maximum possible for all other stats: 
+              <input
+                id="initialHP"
+                type="number"
+                min="1"
+                max="714"
+                name="initialHP"
+                required
+              />
+              <!-- Maximum possible for all other stats: 
                          ((⌊(2 ✕ 255 + 31 + ⌊252 ÷ 4⌋) ✕ 100) ÷ 100⌋ + 5) ✕ 1.1 = 669 -->
-                        <input id="initialAtk" type="number" min="1" max="669" name="initialAtk" required/>
-                        <input id="initialDef" type="number" min="1" max="669" name="initialDef" required/>
-                        <input id="initialSpA" type="number" min="1" max="669" name="initialSpA" required/>
-                        <input id="initialSpD" type="number" min="1" max="669" name="initialSpD" required/>
-                        <input id="initialSpe" type="number" min="1" max="669" name="initialSpe" required/>
-                        <div></div>
-                        <label for="initialHPEV" class="initialEVSettings" hidden>HP</label>
-                        <label for="initialAtkEV" class="initialEVSettings" hidden>Attack</label>
-                        <label for="initialDefEV" class="initialEVSettings" hidden>Defense</label>
-                        <label for="initialSpAEV" class="initialEVSettings" hidden>Sp.Atk</label>
-                        <label for="initialSpDEV" class="initialEVSettings" hidden>Sp.Def</label>
-                        <label for="initialSpeEV" class="initialEVSettings" hidden>Speed</label>
-                        <label class="initialEVSettings" hidden>EVs:</label>
-                        <input id="initialHPEV" type="number" min="0" max="252" value="0" size="1" name="initialHPEV" class="initialEVSettings" hidden disabled/>
-                        <input id="initialAtkEV" type="number" min="0" max="252" value="0" size="1" name="initialAtkEV" class="initialEVSettings" hidden disabled/>
-                        <input id="initialDefEV" type="number" min="0" max="252" value="0" size="1" name="initialDefEV" class="initialEVSettings" hidden disabled/>
-                        <input id="initialSpAEV" type="number" min="0" max="252" value="0" size="1" name="initialSpAEV" class="initialEVSettings" hidden disabled/>
-                        <input id="initialSpDEV" type="number" min="0" max="252" value="0" size="1" name="initialSpDEV" class="initialEVSettings" hidden disabled/>
-                        <input id="initialSpeEV" type="number" min="0" max="252" value="0" size="1"  name="initialSpeEV" class="initialEVSettings" hidden disabled/>
-                    </div>
-                    <div id="levelStatsInputGroup" class="statsInput">
-                        <div>
-                            <input type="radio" name="calcMode" id="exactModeRadio" value="exact" checked />
-                            <label for="exactCalcSwitch">Exact Stats</label><br>
-                            <input type="radio" name="calcMode" id="diffModeRadio" value="diff" />
-                            <label for="diffCalcSwitch">Stats Difference</label><br>
-                            <input type="checkbox" id="useEVsSwitch" name="useEVs"/>
-                            <label for="considerEVsSwitch">Consider EVs</label>
-                        </div>
-                        <div id="levelStatsTextarea">
-                            <label for="levelStats">Stats:</label>
-                            <textarea id="levelStats" cols="23" rows="10" autocomplete="off" wrap="off" name="levelStats"></textarea>
-                        </div>
-                    </div>
-                </fieldset>
-                <button id="calculateButton" type="submit">Calculate</button>
-            </fieldset>
-            <div id="secondColumn">
-                <fieldset id="baseStatsGroup" class="secondColumn">
-                    <legend>Base stats</legend>
-                    <input type="hidden" id="baseHP" name="baseHP" />
-                    <input type="hidden" id="baseAtk" name="baseAtk" />
-                    <input type="hidden" id="baseDef" name="baseDef" />
-                    <input type="hidden" id="baseSpA" name="baseSpA" />
-                    <input type="hidden" id="baseSpD" name="baseSpD" />
-                    <input type="hidden" id="baseSpe" name="baseSpe" />
-                    <table id="baseStatsDisplay">
-                        <tr>
-                            <th>HP</th>
-                            <td><output id="displayBaseHP"></output></td>
-                        </tr>
-                        <tr>
-                            <th>Attack</th>
-                            <td><output id="displayBaseAtk"></output></td>
-                        </tr>
-                        <tr>
-                            <th>Defense</th>
-                            <td><output id="displayBaseDef"></output></td>
-                        </tr>
-                        <tr>
-                            <th>Sp.Atk</th>
-                            <td><output id="displayBaseSpA"></output></td>
-                        </tr>
-                        <tr>
-                            <th>Sp.Def</th>
-                            <td><output id="displayBaseSpD"></output></td>
-                        </tr>
-                        <tr>
-                            <th>Speed</th>
-                            <td><output id="displayBaseSpe"></output></td>
-                        </tr>
-                    </table>
-                </fieldset>
-                <fieldset id="resultsView" class="secondColumn">
-                    <legend>Results</legend>
-                    <table>
-                        <tr>
-                            <th>HP</th>
-                            <td>
-                                <output id="hpIV"></output>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Attack</th>
-                            <td>
-                                <output id="attackIV"></output>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Defense</th>
-                            <td>
-                                <output id="defenseIV"></output>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Sp.Atk</th>
-                            <td>
-                                <output id="spAttackIV"></output>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Sp.Def</th>
-                            <td>
-                                <output id="spDefenseIV"></output>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Speed</th>
-                            <td>
-                                <output id="speedIV"></output>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Next level</th>
-                            <td>
-                                <output id="nextLevel"></output>
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
+              <input
+                id="initialAtk"
+                type="number"
+                min="1"
+                max="669"
+                name="initialAtk"
+                required
+              />
+              <input
+                id="initialDef"
+                type="number"
+                min="1"
+                max="669"
+                name="initialDef"
+                required
+              />
+              <input
+                id="initialSpA"
+                type="number"
+                min="1"
+                max="669"
+                name="initialSpA"
+                required
+              />
+              <input
+                id="initialSpD"
+                type="number"
+                min="1"
+                max="669"
+                name="initialSpD"
+                required
+              />
+              <input
+                id="initialSpe"
+                type="number"
+                min="1"
+                max="669"
+                name="initialSpe"
+                required
+              />
+              <div></div>
+              <label
+                for="initialHPEV"
+                class="initialEVSettings"
+                hidden
+                >HP</label
+              >
+              <label
+                for="initialAtkEV"
+                class="initialEVSettings"
+                hidden
+                >Attack</label
+              >
+              <label
+                for="initialDefEV"
+                class="initialEVSettings"
+                hidden
+                >Defense</label
+              >
+              <label
+                for="initialSpAEV"
+                class="initialEVSettings"
+                hidden
+                >Sp.Atk</label
+              >
+              <label
+                for="initialSpDEV"
+                class="initialEVSettings"
+                hidden
+                >Sp.Def</label
+              >
+              <label
+                for="initialSpeEV"
+                class="initialEVSettings"
+                hidden
+                >Speed</label
+              >
+              <label
+                class="initialEVSettings"
+                hidden
+                >EVs:</label
+              >
+              <input
+                id="initialHPEV"
+                type="number"
+                min="0"
+                max="252"
+                value="0"
+                size="1"
+                name="initialHPEV"
+                class="initialEVSettings"
+                hidden
+                disabled
+              />
+              <input
+                id="initialAtkEV"
+                type="number"
+                min="0"
+                max="252"
+                value="0"
+                size="1"
+                name="initialAtkEV"
+                class="initialEVSettings"
+                hidden
+                disabled
+              />
+              <input
+                id="initialDefEV"
+                type="number"
+                min="0"
+                max="252"
+                value="0"
+                size="1"
+                name="initialDefEV"
+                class="initialEVSettings"
+                hidden
+                disabled
+              />
+              <input
+                id="initialSpAEV"
+                type="number"
+                min="0"
+                max="252"
+                value="0"
+                size="1"
+                name="initialSpAEV"
+                class="initialEVSettings"
+                hidden
+                disabled
+              />
+              <input
+                id="initialSpDEV"
+                type="number"
+                min="0"
+                max="252"
+                value="0"
+                size="1"
+                name="initialSpDEV"
+                class="initialEVSettings"
+                hidden
+                disabled
+              />
+              <input
+                id="initialSpeEV"
+                type="number"
+                min="0"
+                max="252"
+                value="0"
+                size="1"
+                name="initialSpeEV"
+                class="initialEVSettings"
+                hidden
+                disabled
+              />
             </div>
-        </form>
+            <div
+              id="levelStatsInputGroup"
+              class="statsInput"
+            >
+              <div>
+                <input
+                  type="radio"
+                  name="calcMode"
+                  id="exactModeRadio"
+                  value="exact"
+                  checked
+                />
+                <label for="exactCalcSwitch">Exact Stats</label><br />
+                <input
+                  type="radio"
+                  name="calcMode"
+                  id="diffModeRadio"
+                  value="diff"
+                />
+                <label for="diffCalcSwitch">Stats Difference</label><br />
+                <input
+                  type="checkbox"
+                  id="useEVsSwitch"
+                  name="useEVs"
+                />
+                <label for="considerEVsSwitch">Consider EVs</label>
+              </div>
+              <div id="levelStatsTextarea">
+                <label for="levelStats">Stats:</label>
+                <textarea
+                  id="levelStats"
+                  cols="23"
+                  rows="10"
+                  autocomplete="off"
+                  wrap="off"
+                  name="levelStats"
+                ></textarea>
+              </div>
+            </div>
+          </fieldset>
+          <button
+            id="calculateButton"
+            type="submit"
+          >
+            Calculate
+          </button>
+        </fieldset>
+        <div id="secondColumn">
+          <fieldset
+            id="baseStatsGroup"
+            class="secondColumn"
+          >
+            <legend>Base stats</legend>
+            <input
+              type="hidden"
+              id="baseHP"
+              name="baseHP"
+            />
+            <input
+              type="hidden"
+              id="baseAtk"
+              name="baseAtk"
+            />
+            <input
+              type="hidden"
+              id="baseDef"
+              name="baseDef"
+            />
+            <input
+              type="hidden"
+              id="baseSpA"
+              name="baseSpA"
+            />
+            <input
+              type="hidden"
+              id="baseSpD"
+              name="baseSpD"
+            />
+            <input
+              type="hidden"
+              id="baseSpe"
+              name="baseSpe"
+            />
+            <table id="baseStatsDisplay">
+              <tr>
+                <th>HP</th>
+                <td><output id="displayBaseHP"></output></td>
+              </tr>
+              <tr>
+                <th>Attack</th>
+                <td><output id="displayBaseAtk"></output></td>
+              </tr>
+              <tr>
+                <th>Defense</th>
+                <td><output id="displayBaseDef"></output></td>
+              </tr>
+              <tr>
+                <th>Sp.Atk</th>
+                <td><output id="displayBaseSpA"></output></td>
+              </tr>
+              <tr>
+                <th>Sp.Def</th>
+                <td><output id="displayBaseSpD"></output></td>
+              </tr>
+              <tr>
+                <th>Speed</th>
+                <td><output id="displayBaseSpe"></output></td>
+              </tr>
+            </table>
+          </fieldset>
+          <fieldset
+            id="resultsView"
+            class="secondColumn"
+          >
+            <legend>Results</legend>
+            <table>
+              <tr>
+                <th>HP</th>
+                <td>
+                  <output id="hpIV"></output>
+                </td>
+              </tr>
+              <tr>
+                <th>Attack</th>
+                <td>
+                  <output id="attackIV"></output>
+                </td>
+              </tr>
+              <tr>
+                <th>Defense</th>
+                <td>
+                  <output id="defenseIV"></output>
+                </td>
+              </tr>
+              <tr>
+                <th>Sp.Atk</th>
+                <td>
+                  <output id="spAttackIV"></output>
+                </td>
+              </tr>
+              <tr>
+                <th>Sp.Def</th>
+                <td>
+                  <output id="spDefenseIV"></output>
+                </td>
+              </tr>
+              <tr>
+                <th>Speed</th>
+                <td>
+                  <output id="speedIV"></output>
+                </td>
+              </tr>
+              <tr>
+                <th>Next level</th>
+                <td>
+                  <output id="nextLevel"></output>
+                </td>
+              </tr>
+            </table>
+          </fieldset>
+        </div>
+      </form>
     </main>
     <a href="https://github.com/kaitouctr/IVcalc">Source code</a>
     <script src="index.js"></script>
-</body>
+  </body>
 </html>

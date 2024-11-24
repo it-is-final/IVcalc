@@ -21,7 +21,7 @@ jobs:
         with:
             node-version: 22.7
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       # Different build commands are being used so that the JS is minified and to preference native copy commands over shx
       - name: Build script.js
         run: npx esbuild src/index.ts --bundle --minify --outfile=dist/index.js

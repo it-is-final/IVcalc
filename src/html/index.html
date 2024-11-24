@@ -140,32 +140,32 @@
                         <input id="initialSpD" type="number" min="1" max="669" name="initialSpD" required/>
                         <input id="initialSpe" type="number" min="1" max="669" name="initialSpe" required/>
                         <div></div>
-                        <label for="effortValueHP" class="initialEVSettings" hidden>HP</label>
-                        <label for="effortValueAtk" class="initialEVSettings" hidden>Attack</label>
-                        <label for="effortValueDef" class="initialEVSettings" hidden>Defense</label>
-                        <label for="effortValueSpA" class="initialEVSettings" hidden>Sp.Atk</label>
-                        <label for="effortValueSpD" class="initialEVSettings" hidden>Sp.Def</label>
-                        <label for="effortValueSpe" class="initialEVSettings" hidden>Speed</label>
+                        <label for="initialHPEV" class="initialEVSettings" hidden>HP</label>
+                        <label for="initialAtkEV" class="initialEVSettings" hidden>Attack</label>
+                        <label for="initialDefEV" class="initialEVSettings" hidden>Defense</label>
+                        <label for="initialSpAEV" class="initialEVSettings" hidden>Sp.Atk</label>
+                        <label for="initialSpDEV" class="initialEVSettings" hidden>Sp.Def</label>
+                        <label for="initialSpeEV" class="initialEVSettings" hidden>Speed</label>
                         <label class="initialEVSettings" hidden>EVs:</label>
-                        <input id="effortValueHP" type="number" min="0" max="252" value="0" size="1" name="initialHPEV" class="initialEVSettings" hidden disabled/>
-                        <input id="effortValueAtk" type="number" min="0" max="252" value="0" size="1" name="initialAtkEV" class="initialEVSettings" hidden disabled/>
-                        <input id="effortValueDef" type="number" min="0" max="252" value="0" size="1" name="initialDefEV" class="initialEVSettings" hidden disabled/>
-                        <input id="effortValueSpA" type="number" min="0" max="252" value="0" size="1" name="initialSpAEV" class="initialEVSettings" hidden disabled/>
-                        <input id="effortValueSpD" type="number" min="0" max="252" value="0" size="1" name="initialSpDEV" class="initialEVSettings" hidden disabled/>
-                        <input id="effortValueSpe" type="number" min="0" max="252" value="0" size="1"  name="initialSpeEV" class="initialEVSettings" hidden disabled/>
+                        <input id="initialHPEV" type="number" min="0" max="252" value="0" size="1" name="initialHPEV" class="initialEVSettings" hidden disabled/>
+                        <input id="initialAtkEV" type="number" min="0" max="252" value="0" size="1" name="initialAtkEV" class="initialEVSettings" hidden disabled/>
+                        <input id="initialDefEV" type="number" min="0" max="252" value="0" size="1" name="initialDefEV" class="initialEVSettings" hidden disabled/>
+                        <input id="initialSpAEV" type="number" min="0" max="252" value="0" size="1" name="initialSpAEV" class="initialEVSettings" hidden disabled/>
+                        <input id="initialSpDEV" type="number" min="0" max="252" value="0" size="1" name="initialSpDEV" class="initialEVSettings" hidden disabled/>
+                        <input id="initialSpeEV" type="number" min="0" max="252" value="0" size="1"  name="initialSpeEV" class="initialEVSettings" hidden disabled/>
                     </div>
                     <div id="levelStatsInputGroup" class="statsInput">
                         <div>
-                            <input type="radio" name="calcMode" id="exactCalcSwitch" value="exact" checked />
+                            <input type="radio" name="calcMode" id="exactModeRadio" value="exact" checked />
                             <label for="exactCalcSwitch">Exact Stats</label><br>
-                            <input type="radio" name="calcMode" id="diffCalcSwitch" value="diff" />
+                            <input type="radio" name="calcMode" id="diffModeRadio" value="diff" />
                             <label for="diffCalcSwitch">Stats Difference</label><br>
-                            <input type="checkbox" id="considerEVsSwitch" name="considerEVs"/>
+                            <input type="checkbox" id="useEVsSwitch" name="useEVs"/>
                             <label for="considerEVsSwitch">Consider EVs</label>
                         </div>
                         <div id="levelStatsTextarea">
-                            <label for="levelStatsInput">Stats:</label>
-                            <textarea id="levelStatsInput" cols="23" rows="10" autocomplete="off" wrap="off" name="levelStats"></textarea>
+                            <label for="levelStats">Stats:</label>
+                            <textarea id="levelStats" cols="23" rows="10" autocomplete="off" wrap="off" name="levelStats"></textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -174,73 +174,85 @@
             <div id="secondColumn">
                 <fieldset id="baseStatsGroup" class="secondColumn">
                     <legend>Base stats</legend>
-                    <input type="hidden" id="baseHP" name="baseHP" value="0" />
-                    <input type="hidden" id="baseAtk" name="baseAtk" value="0" />
-                    <input type="hidden" id="baseDef" name="baseDef" value="0" />
-                    <input type="hidden" id="baseSpA" name="baseSpA" value="0" />
-                    <input type="hidden" id="baseSpD" name="baseSpD" value="0" />
-                    <input type="hidden" id="baseSpe" name="baseSpe" value="0" />
+                    <input type="hidden" id="baseHP" name="baseHP" />
+                    <input type="hidden" id="baseAtk" name="baseAtk" />
+                    <input type="hidden" id="baseDef" name="baseDef" />
+                    <input type="hidden" id="baseSpA" name="baseSpA" />
+                    <input type="hidden" id="baseSpD" name="baseSpD" />
+                    <input type="hidden" id="baseSpe" name="baseSpe" />
                     <table id="baseStatsDisplay">
                         <tr>
                             <th>HP</th>
-                            <td id="displayBaseHP"></td>
+                            <td><output id="displayBaseHP"></output></td>
                         </tr>
                         <tr>
                             <th>Attack</th>
-                            <td id="displayBaseAtk"></td>
+                            <td><output id="displayBaseAtk"></output></td>
                         </tr>
                         <tr>
                             <th>Defense</th>
-                            <td id="displayBaseDef"></td>
+                            <td><output id="displayBaseDef"></output></td>
                         </tr>
                         <tr>
                             <th>Sp.Atk</th>
-                            <td id="displayBaseSpA"></td>
+                            <td><output id="displayBaseSpA"></output></td>
                         </tr>
                         <tr>
                             <th>Sp.Def</th>
-                            <td id="displayBaseSpD"></td>
+                            <td><output id="displayBaseSpD"></output></td>
                         </tr>
                         <tr>
                             <th>Speed</th>
-                            <td id="displayBaseSpe"></td>
+                            <td><output id="displayBaseSpe"></output></td>
                         </tr>
                     </table>
                 </fieldset>
                 <fieldset id="resultsView" class="secondColumn">
                     <legend>Results</legend>
-                    <output form="mainForm">
-                        <table>
-                            <tr>
-                                <th>HP</th>
-                                <td id="displayHPIV">0</td>
-                            </tr>
-                            <tr>
-                                <th>Attack</th>
-                                <td id="displayAtkIV">0</td>
-                            </tr>
-                            <tr>
-                                <th>Defense</th>
-                                <td id="displayDefIV">0</td>
-                            </tr>
-                            <tr>
-                                <th>Sp.Atk</th>
-                                <td id="displaySpAIV">0</td>
-                            </tr>
-                            <tr>
-                                <th>Sp.Def</th>
-                                <td id="displaySpDIV">0</td>
-                            </tr>
-                            <tr>
-                                <th>Speed</th>
-                                <td id="displaySpeIV">0</td>
-                            </tr>
-                            <tr>
-                                <th>Next level</th>
-                                <td iv="displayNextLevel">0</td>
-                            </tr>
-                        </table>
-                    </output>
+                    <table>
+                        <tr>
+                            <th>HP</th>
+                            <td>
+                                <output id="hpIV"></output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Attack</th>
+                            <td>
+                                <output id="attackIV"></output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Defense</th>
+                            <td>
+                                <output id="defenseIV"></output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Sp.Atk</th>
+                            <td>
+                                <output id="spAttackIV"></output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Sp.Def</th>
+                            <td>
+                                <output id="spDefenseIV"></output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Speed</th>
+                            <td>
+                                <output id="speedIV"></output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Next level</th>
+                            <td>
+                                <output id="nextLevel"></output>
+                            </td>
+                        </tr>
+                    </table>
                 </fieldset>
             </div>
         </form>

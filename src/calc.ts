@@ -272,6 +272,27 @@ const Characteristics = Object.freeze({
   'Somewhat stubborn': { Stat: 'SpDefense', IVs: [4, 9, 14, 19, 24, 29] },
 });
 
+function hpFormula(baseStat: number, iv: number, ev: number, level: number) {
+  return (
+    Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) +
+    level +
+    10
+  );
+}
+
+function otherStatFormula(
+  baseStat: number,
+  iv: number,
+  ev: number,
+  level: number,
+  nature: number,
+) {
+  return Math.floor(
+    (Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5) *
+      nature,
+  );
+}
+
 function narrowHPIVRange(
   baseStat: number,
   ev: number,
@@ -279,13 +300,7 @@ function narrowHPIVRange(
   stat: number,
   ivRange: number[],
 ) {
-  return ivRange.filter(
-    iv =>
-      Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) +
-        level +
-        10 ===
-      stat,
-  );
+  return ivRange.filter(iv => hpFormula(baseStat, iv, ev, level) === stat);
 }
 
 function narrowIVRange(
@@ -297,12 +312,7 @@ function narrowIVRange(
   ivRange: number[],
 ) {
   return ivRange.filter(
-    iv =>
-      Math.floor(
-        (Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) +
-          5) *
-          nature,
-      ) === stat,
+    iv => otherStatFormula(baseStat, iv, ev, level, nature) === stat,
   );
 }
 
@@ -383,13 +393,52 @@ function narrowByHiddenPower(
   ];
 }
 
+function getNextLevel(
+  stat: Stat,
+  baseStat: number,
+  ivRange: number[],
+  ev: number,
+  lastStatLevel: number,
+  nature: number,
+) {
+  // Protect against infinite loops in zero-length arrays
+  if (ivRange.length !== 0) {
+    return null;
+  }
+  // Assuming EVs won't change is a lot easier to program,
+  // and leads to less unexpected results
+  let level = lastStatLevel;
+  const calcFormula = stat === 'HP' ? hpFormula : otherStatFormula;
+  do {
+    level += 1;
+  } while (
+    ivRange
+      .map(iv => calcFormula(baseStat, iv, ev, level, nature))
+      .every((result, _, arr) => result === arr[0])
+  );
+  return level;
+}
+
 export function calculateIVs(
   baseStats: BaseStats,
   statLevels: StatLevel[],
   natureInput: string,
   characteristicInput: string,
   hiddenPower: string,
-) {
+): [
+  number[],
+  number[],
+  number[],
+  number[],
+  number[],
+  number[],
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+] {
   const hpIVRange = [...Array(32).keys()];
   const atkIVRange = [...Array(32).keys()];
   const defIVRange = [...Array(32).keys()];
@@ -403,23 +452,6 @@ export function calculateIVs(
       }
     }
   };
-  if (hiddenPower !== '') {
-    const results = narrowByHiddenPower(
-      hpIVRange,
-      atkIVRange,
-      defIVRange,
-      speIVRange,
-      spaIVRange,
-      spdIVRange,
-      hiddenPower,
-    );
-    checkIVMembership(hpIVRange, results[0]);
-    checkIVMembership(atkIVRange, results[1]);
-    checkIVMembership(defIVRange, results[2]);
-    checkIVMembership(speIVRange, results[3]);
-    checkIVMembership(spaIVRange, results[4]);
-    checkIVMembership(spdIVRange, results[5]);
-  }
   const natureModifier: NatureModifiers = Natures[natureInput];
   for (const statLevel of statLevels) {
     const results = [
@@ -478,7 +510,24 @@ export function calculateIVs(
     checkIVMembership(spdIVRange, results[4]);
     checkIVMembership(speIVRange, results[5]);
   }
-  if (characteristicInput !== '' && characteristicInput in Characteristics) {
+  if (hiddenPower !== null) {
+    const results = narrowByHiddenPower(
+      hpIVRange,
+      atkIVRange,
+      defIVRange,
+      speIVRange,
+      spaIVRange,
+      spdIVRange,
+      hiddenPower,
+    );
+    checkIVMembership(hpIVRange, results[0]);
+    checkIVMembership(atkIVRange, results[1]);
+    checkIVMembership(defIVRange, results[2]);
+    checkIVMembership(speIVRange, results[3]);
+    checkIVMembership(spaIVRange, results[4]);
+    checkIVMembership(spdIVRange, results[5]);
+  }
+  if (characteristicInput !== null && characteristicInput in Characteristics) {
     let highestIV = [
       ...hpIVRange,
       ...atkIVRange,
@@ -525,6 +574,54 @@ export function calculateIVs(
         break;
     }
   }
+  const nextHPLevel = getNextLevel(
+    'HP',
+    baseStats.HP,
+    hpIVRange,
+    statLevels[statLevels.length - 1].HPEV,
+    statLevels[statLevels.length - 1].Level,
+    null,
+  );
+  const nextAtkLevel = getNextLevel(
+    'Attack',
+    baseStats.Attack,
+    atkIVRange,
+    statLevels[statLevels.length - 1].AttackEV,
+    statLevels[statLevels.length - 1].Level,
+    natureModifier.Attack,
+  );
+  const nextDefLevel = getNextLevel(
+    'HP',
+    baseStats.Defense,
+    defIVRange,
+    statLevels[statLevels.length - 1].DefenseEV,
+    statLevels[statLevels.length - 1].Level,
+    natureModifier.Defense,
+  );
+  const nextSpALevel = getNextLevel(
+    'HP',
+    baseStats.SpAttack,
+    spaIVRange,
+    statLevels[statLevels.length - 1].SpAttackEV,
+    statLevels[statLevels.length - 1].Level,
+    natureModifier.SpAttack,
+  );
+  const nextSpDLevel = getNextLevel(
+    'HP',
+    baseStats.SpDefense,
+    spdIVRange,
+    statLevels[statLevels.length - 1].SpDefenseEV,
+    statLevels[statLevels.length - 1].Level,
+    natureModifier.SpDefense,
+  );
+  const nextSpeLevel = getNextLevel(
+    'HP',
+    baseStats.Speed,
+    speIVRange,
+    statLevels[statLevels.length - 1].SpeedEV,
+    statLevels[statLevels.length - 1].Level,
+    natureModifier.Speed,
+  );
   return [
     hpIVRange,
     atkIVRange,
@@ -532,5 +629,11 @@ export function calculateIVs(
     spaIVRange,
     spdIVRange,
     speIVRange,
+    nextHPLevel,
+    nextAtkLevel,
+    nextDefLevel,
+    nextSpALevel,
+    nextSpDLevel,
+    nextSpeLevel,
   ];
 }

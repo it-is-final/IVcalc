@@ -351,6 +351,36 @@ mainForm.addEventListener('submit', function (e) {
     SpDefenseEV: Number(params.get('initialSpDEV') ?? 0),
     SpeedEV: Number(params.get('initialSpeEV') ?? 0),
   });
+  const mapStatLevel = (statLevel: number[]) => {
+    let hp: number;
+    let attack: number;
+    let defense: number;
+    let spAttack: number;
+    let spDefense: number;
+    let speed: number;
+    switch (params.get('calcMode') as string) {
+      case 'exact':
+        hp = statLevel[0];
+        attack = statLevel[1];
+        defense = statLevel[2];
+        spAttack = statLevel[3];
+        defense = statLevel[4];
+        speed = statLevel[5];
+        break;
+      case 'diff':
+        hp = statLevels[statLevels.length - 1].HP + statLevel[0];
+        attack = statLevels[statLevels.length - 1].Attack + statLevel[1];
+        defense = statLevels[statLevels.length - 1].Defense + statLevel[2];
+        spAttack = statLevels[statLevels.length - 1].SpAttack + statLevel[3];
+        spDefense = statLevels[statLevels.length - 1].SpDefense + statLevel[4];
+        speed = statLevels[statLevels.length - 1].Speed + statLevel[5];
+        break;
+      default:
+        alert('Calculation mode is unset');
+        return;
+    }
+    return [hp, attack, defense, spAttack, spDefense, speed];
+  };
   for (const statLevel of statInput) {
     level += 1;
     if (statLevel.length === 1 && statLevel.includes(null)) {
@@ -360,32 +390,22 @@ mainForm.addEventListener('submit', function (e) {
       alert('Input is incorrectly formatted, please fix this.');
       return;
     }
+    const [
+      statLevelHP,
+      statLevelAtk,
+      statLevelDef,
+      statLevelSpA,
+      statLevelSpD,
+      statLevelSpe,
+    ] = mapStatLevel(statLevel);
     statLevels.push({
       Level: level,
-      HP:
-        params.get('calcMode') === 'exact'
-          ? statLevel[0]
-          : statLevels[statLevels.length - 1].HP + statLevel[0],
-      Attack:
-        params.get('calcMode') === 'exact'
-          ? statLevel[1]
-          : statLevels[statLevels.length - 1].Attack + statLevel[1],
-      Defense:
-        params.get('calcMode') === 'exact'
-          ? statLevel[2]
-          : statLevels[statLevels.length - 1].Defense + statLevel[2],
-      SpAttack:
-        params.get('calcMode') === 'exact'
-          ? statLevel[3]
-          : statLevels[statLevels.length - 1].SpAttack + statLevel[3],
-      SpDefense:
-        params.get('calcMode') === 'exact'
-          ? statLevel[4]
-          : statLevels[statLevels.length - 1].SpDefense + statLevel[4],
-      Speed:
-        params.get('calcMode') === 'exact'
-          ? statLevel[5]
-          : statLevels[statLevels.length - 1].Speed + statLevel[5],
+      HP: statLevelHP,
+      Attack: statLevelAtk,
+      Defense: statLevelDef,
+      SpAttack: statLevelSpA,
+      SpDefense: statLevelSpD,
+      Speed: statLevelSpe,
       HPEV: statLevel[6] ?? 0,
       AttackEV: statLevel[7] ?? 0,
       DefenseEV: statLevel[8] ?? 0,
@@ -394,7 +414,20 @@ mainForm.addEventListener('submit', function (e) {
       SpeedEV: statLevel[11] ?? 0,
     });
   }
-  const [hpIV, atkIV, defIV, spaIV, spdIV, speIV] = calculateIVs(
+  const [
+    hpIV,
+    atkIV,
+    defIV,
+    spaIV,
+    spdIV,
+    speIV,
+    nextHPLevel,
+    nextAtkLevel,
+    nextDefLevel,
+    nextSpALevel,
+    nextSpDLevel,
+    nextSpeLevel,
+  ] = calculateIVs(
     {
       HP: Number(params.get('baseHP')),
       Attack: Number(params.get('baseAtk')),
@@ -405,21 +438,41 @@ mainForm.addEventListener('submit', function (e) {
     },
     statLevels,
     params.get('nature') as string,
-    (params.get('characteristic') as string) ?? '',
-    (params.get('hiddenPower') as string) ?? '',
+    (params.get('characteristic') as string) || null,
+    (params.get('hiddenPower') as string) || null,
   );
+  const outputIVs = (() => {
+    const ivRanges = [hpIV, atkIV, defIV, spaIV, spdIV, speIV];
+    if (ivRanges.every(ivRange => ivRange.length > 0)) {
+      return ivRanges.map(ivRange => ivRange.join(', '));
+    } else {
+      return Array<string>(6).fill(null);
+    }
+  })();
   (mainFormItems['hpIV'] as HTMLOutputElement).value =
-    hpIV.length > 0 ? hpIV.join(', ') : 'Invalid';
+    outputIVs[0] ?? 'Invalid';
   (mainFormItems['attackIV'] as HTMLOutputElement).value =
-    atkIV.length > 0 ? atkIV.join(', ') : 'Invalid';
+    outputIVs[1] ?? 'Invalid';
   (mainFormItems['defenseIV'] as HTMLOutputElement).value =
-    defIV.length > 0 ? defIV.join(', ') : 'Invalid';
+    outputIVs[2] ?? 'Invalid';
   (mainFormItems['spAttackIV'] as HTMLOutputElement).value =
-    spaIV.length > 0 ? spaIV.join(', ') : 'Invalid';
+    outputIVs[3] ?? 'Invalid';
   (mainFormItems['spDefenseIV'] as HTMLOutputElement).value =
-    spdIV.length > 0 ? spdIV.join(', ') : 'Invalid';
+    outputIVs[4] ?? 'Invalid';
   (mainFormItems['speedIV'] as HTMLOutputElement).value =
-    speIV.length > 0 ? speIV.join(', ') : 'Invalid';
+    outputIVs[5] ?? 'Invalid';
+  (mainFormItems['nextLevel'] as HTMLOutputElement).value = outputIVs.every(
+    result => result !== null,
+  )
+    ? [
+        nextHPLevel,
+        nextAtkLevel,
+        nextDefLevel,
+        nextSpALevel,
+        nextSpDLevel,
+        nextSpeLevel,
+      ].join(', ')
+    : 'Invalid';
 });
 
 useEVsSwitch.addEventListener('change', function () {

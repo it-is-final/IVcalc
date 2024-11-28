@@ -402,7 +402,7 @@ function getNextLevel(
   nature: number,
 ) {
   // Protect against infinite loops in zero-length arrays
-  if (ivRange.length !== 0) {
+  if (ivRange.length === 0) {
     return null;
   }
   // Assuming EVs won't change is a lot easier to program,

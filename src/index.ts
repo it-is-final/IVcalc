@@ -441,38 +441,42 @@ mainForm.addEventListener('submit', function (e) {
     (params.get('characteristic') as string) || null,
     (params.get('hiddenPower') as string) || null,
   );
-  const outputIVs = (() => {
-    const ivRanges = [hpIV, atkIV, defIV, spaIV, spdIV, speIV];
-    if (ivRanges.every(ivRange => ivRange.length > 0)) {
-      return ivRanges.map(ivRange => ivRange.join(', '));
-    } else {
-      return Array<string>(6).fill(null);
+  const formatOutputIVs = (ivRange: number[]) => {
+    if (!(ivRange.length > 0)) {
+      return null;
     }
-  })();
+    if (
+      ivRange.every(
+        (iv, idx, arr) => iv === arr[0] || iv === arr[idx - 1] + 1,
+      ) &&
+      ivRange.length > 1
+    ) {
+      return `${ivRange[0]}–${ivRange[ivRange.length - 1]}`;
+    }
+    return ivRange.join(', ');
+  };
   (mainFormItems['hpIV'] as HTMLOutputElement).value =
-    outputIVs[0] ?? 'Invalid';
+    formatOutputIVs(hpIV) ?? 'Invalid';
   (mainFormItems['attackIV'] as HTMLOutputElement).value =
-    outputIVs[1] ?? 'Invalid';
+    formatOutputIVs(atkIV) ?? 'Invalid';
   (mainFormItems['defenseIV'] as HTMLOutputElement).value =
-    outputIVs[2] ?? 'Invalid';
+    formatOutputIVs(defIV) ?? 'Invalid';
   (mainFormItems['spAttackIV'] as HTMLOutputElement).value =
-    outputIVs[3] ?? 'Invalid';
+    formatOutputIVs(spaIV) ?? 'Invalid';
   (mainFormItems['spDefenseIV'] as HTMLOutputElement).value =
-    outputIVs[4] ?? 'Invalid';
+    formatOutputIVs(spdIV) ?? 'Invalid';
   (mainFormItems['speedIV'] as HTMLOutputElement).value =
-    outputIVs[5] ?? 'Invalid';
-  (mainFormItems['nextLevel'] as HTMLOutputElement).value = outputIVs.every(
-    result => result !== null,
-  )
-    ? [
-        nextHPLevel,
-        nextAtkLevel,
-        nextDefLevel,
-        nextSpALevel,
-        nextSpDLevel,
-        nextSpeLevel,
-      ].join(', ')
-    : 'Invalid';
+    formatOutputIVs(speIV) ?? 'Invalid';
+  (mainFormItems['nextLevel'] as HTMLOutputElement).value = [
+    nextHPLevel,
+    nextAtkLevel,
+    nextDefLevel,
+    nextSpALevel,
+    nextSpDLevel,
+    nextSpeLevel,
+  ]
+    .map(level => String(level ?? 'Invalid'))
+    .join(', ');
 });
 
 useEVsSwitch.addEventListener('change', function () {

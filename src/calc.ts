@@ -128,7 +128,7 @@ const Natures = Object.freeze({
     SpAttack: 0.9,
     SpDefense: 1.0,
   },
-  Lax: { 
+  Lax: {
     Attack: 1.0,
     Defense: 1.1,
     Speed: 1.0,
@@ -301,28 +301,33 @@ function otherStatFormula(
 
 function solveHPIV(baseStat: number, ev: number, level: number, stat: number) {
   return Math.ceil(
-    (stat - 10 - level) / (level / 100) - Math.floor(ev / 4) - 2 * baseStat
+    (stat - 10 - level) / (level / 100) - Math.floor(ev / 4) - 2 * baseStat,
   );
 }
 
-function solveOtherIV(baseStat: number, ev: number, level: number, rawStat: number) {
+function solveOtherIV(
+  baseStat: number,
+  ev: number,
+  level: number,
+  rawStat: number,
+) {
   return Math.ceil(
-    (rawStat - 5) / (level / 100) - Math.floor(ev / 4) - 2 * baseStat
+    (rawStat - 5) / (level / 100) - Math.floor(ev / 4) - 2 * baseStat,
   );
 }
 
 function clampIV(iv: number) {
-  return Math.min(Math.max(iv, 0), 31)
+  return Math.min(Math.max(iv, 0), 31);
 }
 
 function createIVRange(lowerBound: number, upperBound: number) {
-  const lower = clampIV(lowerBound)
-  const upper = clampIV(upperBound)
-  const ivRange: number[] = []
+  const lower = clampIV(lowerBound);
+  const upper = clampIV(upperBound);
+  const ivRange: number[] = [];
   for (let iv = lower; iv <= upper; iv++) {
-    ivRange.push(iv)
+    ivRange.push(iv);
   }
-  return ivRange
+  return ivRange;
 }
 
 function isStatValid(
@@ -331,16 +336,16 @@ function isStatValid(
   ev: number,
   level: number,
   nature: number,
-  stat: number
+  stat: number,
 ) {
   let lowerBound: number;
   let upperBound: number;
   if (isHPStat) {
-    lowerBound = hpFormula(baseStat, 0, ev, level)
-    upperBound = hpFormula(baseStat, 31, ev, level)
+    lowerBound = hpFormula(baseStat, 0, ev, level);
+    upperBound = hpFormula(baseStat, 31, ev, level);
   } else {
-    lowerBound = otherStatFormula(baseStat, 0, ev, level, nature)
-    upperBound = otherStatFormula(baseStat, 31, ev, level, nature)
+    lowerBound = otherStatFormula(baseStat, 0, ev, level, nature);
+    upperBound = otherStatFormula(baseStat, 31, ev, level, nature);
   }
   if (!(stat >= lowerBound && stat <= upperBound)) {
     return false;
@@ -352,7 +357,7 @@ function calcHPIVRange(
   baseStat: number,
   ev: number,
   level: number,
-  stat: number
+  stat: number,
 ) {
   if (!isStatValid(true, baseStat, ev, level, null, stat)) {
     return [];
@@ -360,7 +365,7 @@ function calcHPIVRange(
   return createIVRange(
     solveHPIV(baseStat, ev, level, stat),
     solveHPIV(baseStat, ev, level, stat + 1),
-  )
+  );
 }
 
 function calcOtherStatIVRange(
@@ -368,17 +373,17 @@ function calcOtherStatIVRange(
   ev: number,
   level: number,
   nature: number,
-  stat: number
+  stat: number,
 ) {
   if (!isStatValid(false, baseStat, ev, level, nature, stat)) {
     return [];
   }
-  const rawStatLower = Math.ceil(stat / nature)
-  const rawStatUpper = Math.ceil((stat + 1) / nature)
+  const rawStatLower = Math.ceil(stat / nature);
+  const rawStatUpper = Math.ceil((stat + 1) / nature);
   return createIVRange(
     solveOtherIV(baseStat, ev, level, rawStatLower),
     solveOtherIV(baseStat, ev, level, rawStatUpper),
-  )
+  );
 }
 
 function getIVRanges(
@@ -390,44 +395,44 @@ function getIVRanges(
     baseStats.HP,
     statLevel.HPEV,
     statLevel.Level,
-    statLevel.HP
+    statLevel.HP,
   );
   const attack = calcOtherStatIVRange(
     baseStats.Attack,
     statLevel.AttackEV,
     statLevel.Level,
     nature.Attack,
-    statLevel.Attack
+    statLevel.Attack,
   );
   const defense = calcOtherStatIVRange(
     baseStats.Defense,
     statLevel.DefenseEV,
     statLevel.Level,
     nature.Defense,
-    statLevel.Defense
+    statLevel.Defense,
   );
   const spAttack = calcOtherStatIVRange(
     baseStats.SpAttack,
     statLevel.SpAttackEV,
     statLevel.Level,
     nature.SpAttack,
-    statLevel.SpAttack
+    statLevel.SpAttack,
   );
   const spDefense = calcOtherStatIVRange(
     baseStats.SpDefense,
     statLevel.SpDefenseEV,
     statLevel.Level,
     nature.SpDefense,
-    statLevel.SpDefense
+    statLevel.SpDefense,
   );
   const speed = calcOtherStatIVRange(
     baseStats.Speed,
     statLevel.SpeedEV,
     statLevel.Level,
     nature.Speed,
-    statLevel.Speed
+    statLevel.Speed,
   );
-  return [hp, attack, defense, spAttack, spDefense, speed]
+  return [hp, attack, defense, spAttack, spDefense, speed];
 }
 
 function narrowByHiddenPower(
@@ -561,8 +566,8 @@ export function calculateIVs(
     defIVRange,
     spaIVRange,
     spdIVRange,
-    speIVRange
-  ] = getIVRanges(baseStats, Natures[natureInput], statLevels[0])
+    speIVRange,
+  ] = getIVRanges(baseStats, Natures[natureInput], statLevels[0]);
   const checkIVMembership = (arr: number[], l: number[]) => {
     for (let i = arr.length - 1; i >= 0; i--) {
       if (!l.includes(arr[i])) {
@@ -572,18 +577,16 @@ export function calculateIVs(
   };
   if (statLevels.length > 1) {
     for (const statLevel of statLevels.slice(1)) {
-      for (
-        const [ivRange, newIVRange] of
-        getIVRanges(baseStats, Natures[natureInput], statLevel)
-        .map((_ivRange, i) => [[
-          hpIVRange,
-          atkIVRange,
-          defIVRange,
-          spaIVRange,
-          spdIVRange,
-          speIVRange
-        ][i], _ivRange])
-      ) {
+      for (const [ivRange, newIVRange] of getIVRanges(
+        baseStats,
+        Natures[natureInput],
+        statLevel,
+      ).map((_ivRange, i) => [
+        [hpIVRange, atkIVRange, defIVRange, spaIVRange, spdIVRange, speIVRange][
+          i
+        ],
+        _ivRange,
+      ])) {
         for (let i = ivRange.length - 1; i >= 0; i--) {
           if (!newIVRange.includes(ivRange[i])) {
             ivRange.splice(i, 1);
@@ -593,28 +596,23 @@ export function calculateIVs(
     }
   }
   if (hiddenPower !== null) {
-    for (
-      const [ivRange, newIVRange] of
-      narrowByHiddenPower(
-        hpIVRange,
-        atkIVRange,
-        defIVRange,
-        speIVRange,
-        spaIVRange,
-        spdIVRange,
-        hiddenPower,
-      ).map((_ivRange, i) => [[
-        hpIVRange,
-        atkIVRange,
-        defIVRange,
-        speIVRange,
-        spaIVRange,
-        spdIVRange
-      ][i], _ivRange])
-    ) {
+    for (const [ivRange, newIVRange] of narrowByHiddenPower(
+      hpIVRange,
+      atkIVRange,
+      defIVRange,
+      speIVRange,
+      spaIVRange,
+      spdIVRange,
+      hiddenPower,
+    ).map((_ivRange, i) => [
+      [hpIVRange, atkIVRange, defIVRange, speIVRange, spaIVRange, spdIVRange][
+        i
+      ],
+      _ivRange,
+    ])) {
       for (let i = ivRange.length - 1; i >= 0; i--) {
         if (!newIVRange.includes(ivRange[i])) {
-          ivRange.splice(i, 1)
+          ivRange.splice(i, 1);
         }
       }
     }

@@ -364,7 +364,7 @@ function calcHPIVRange(
   }
   return createIVRange(
     solveHPIV(baseStat, ev, level, stat),
-    solveHPIV(baseStat, ev, level, stat + 1),
+    solveHPIV(baseStat, ev, level, stat + 1) - 1,
   );
 }
 
@@ -382,7 +382,7 @@ function calcOtherStatIVRange(
   const rawStatUpper = Math.ceil((stat + 1) / nature);
   return createIVRange(
     solveOtherIV(baseStat, ev, level, rawStatLower),
-    solveOtherIV(baseStat, ev, level, rawStatUpper),
+    solveOtherIV(baseStat, ev, level, rawStatUpper) - 1,
   );
 }
 

@@ -248,24 +248,24 @@ function calcOtherStatRange(
   }
 }
 
-function narrowByHiddenPower(targetHPType: string) {
-  const TYPES = {
-    0: 'Fighting',
-    1: 'Flying',
-    2: 'Poison',
-    3: 'Ground',
-    4: 'Rock',
-    5: 'Bug',
-    6: 'Ghost',
-    7: 'Steel',
-    8: 'Fire',
-    9: 'Water',
-    10: 'Grass',
-    11: 'Electric',
-    12: 'Psychic',
-    13: 'Ice',
-    14: 'Dragon',
-    15: 'Dark',
+function narrowByHiddenPower(hiddenPower: string) {
+  const HiddenPowerTypes = {
+    Fighting: 0,
+    Flying: 1,
+    Poison: 2,
+    Ground: 3,
+    Rock: 4,
+    Bug: 5,
+    Ghost: 6,
+    Steel: 7,
+    Fire: 8,
+    Water: 9,
+    Grass: 10,
+    Electric: 11,
+    Psychic: 12,
+    Ice: 13,
+    Dragon: 14,
+    Dark: 15,
   };
   const lsbRanges = {
     HP: new Set() as Set<number>,
@@ -275,39 +275,26 @@ function narrowByHiddenPower(targetHPType: string) {
     SpDefense: new Set() as Set<number>,
     Speed: new Set() as Set<number>,
   };
-  /*
-   *  Below loops through all possible combinations of LSBs of the
-   *  six stats. This creates a lookup table on the fly for
-   *  a specific hidden power.
-   */
-  for (const hpLSB of [0, 1]) {
-    for (const atkLSB of [0, 1]) {
-      for (const defLSB of [0, 1]) {
-        for (const speLSB of [0, 1]) {
-          for (const spaLSB of [0, 1]) {
-            for (const spdLSB of [0, 1]) {
-              const hpType = Math.floor(
-                ((hpLSB +
-                  2 * atkLSB +
-                  4 * defLSB +
-                  8 * speLSB +
-                  16 * spaLSB +
-                  32 * spdLSB) *
-                  15) /
-                  63,
-              );
-              if (!(TYPES[hpType] === targetHPType)) continue;
-              lsbRanges.HP.add(hpLSB);
-              lsbRanges.Attack.add(atkLSB);
-              lsbRanges.Defense.add(defLSB);
-              lsbRanges.SpAttack.add(spaLSB);
-              lsbRanges.SpDefense.add(spdLSB);
-              lsbRanges.Speed.add(speLSB);
-            }
-          }
-        }
-      }
-    }
+  // In here, ivLSBs is the binary number formed from
+  // hpLSB + 2 * atkLSB + 4 * defLSB + 8 * speLSB + 16 * spaLSB + 32 * spdLSB
+  // in the hidden power formula
+  // (15 / 63) is the remaining part of the equation after removing ivLSBs
+  // Based off https://math.stackexchange.com/a/1683536
+  const minIVLSBs = Math.max(
+    Math.ceil(HiddenPowerTypes[hiddenPower] / (15 / 63)),
+    0,
+  );
+  const maxIVLSBs = Math.min(
+    Math.ceil((HiddenPowerTypes[hiddenPower] + 1) / (15 / 63)) - 1,
+    63,
+  );
+  for (let ivLSBs = minIVLSBs; ivLSBs <= maxIVLSBs; ivLSBs++) {
+    lsbRanges.HP.add((ivLSBs >> 0) & 1);
+    lsbRanges.Attack.add((ivLSBs >> 1) & 1);
+    lsbRanges.Defense.add((ivLSBs >> 2) & 1);
+    lsbRanges.Speed.add((ivLSBs >> 3) & 1);
+    lsbRanges.SpAttack.add((ivLSBs >> 4) & 1);
+    lsbRanges.SpDefense.add((ivLSBs >> 5) & 1);
   }
   return lsbRanges;
 }
@@ -434,38 +421,34 @@ export function calcIVRanges(
   if (characteristicInput !== null && characteristicInput in Characteristics) {
     const highestStat: Stat = Characteristics[characteristicInput].Stat;
     const ivModulo: number = Characteristics[characteristicInput].IVModulo;
-    let highestIV = [
+    let highestIV = Math.max(
       ...ivRanges.HP,
       ...ivRanges.Attack,
       ...ivRanges.Defense,
       ...ivRanges.SpAttack,
       ...ivRanges.SpDefense,
       ...ivRanges.Speed,
-    ].reduce((x, y) => Math.max(x, y));
+    );
     if (highestIV % 5 > ivModulo) {
-      highestIV = highestIV - ((highestIV % 5) - ivModulo);
+      highestIV -= (highestIV % 5) - ivModulo;
     }
     if (highestIV % 5 < ivModulo) {
-      highestIV = highestIV - (highestIV % 5) - (5 - ivModulo);
+      highestIV -= (highestIV % 5) + (5 - ivModulo);
     }
     const calcRange: number[] = [];
     for (let i = 0; i <= (highestIV - (highestIV % 5)) / 5; i++) {
       const iv = i * 5 + ivModulo;
-      if (iv <= highestIV) {
-        calcRange.push(iv);
-      }
+      calcRange.push(iv);
     }
     for (const stat of Object.keys(ivRanges)) {
       const ivRange: number[] = ivRanges[stat];
       for (let i = ivRange.length - 1; i >= 0; i--) {
-        if (ivRange[i] > highestIV) {
+        if (
+          (stat === highestStat && !calcRange.includes(ivRange[i])) ||
+          ivRange[i] > highestIV
+        ) {
           ivRange.splice(i, 1);
         }
-      }
-    }
-    for (let i = ivRanges[highestStat].length - 1; i >= 0; i--) {
-      if (!calcRange.includes(ivRanges[highestStat][i])) {
-        ivRanges[highestStat].splice(i, 1);
       }
     }
   }

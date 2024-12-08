@@ -51,234 +51,68 @@ export interface StatLevel {
   SpeedEV: number;
 }
 
-interface Characteristic {
-  Stat: Stat;
-  IVs: number[];
-}
-
-interface NatureModifiers {
-  Attack: 0.9 | 1.0 | 1.1;
-  Defense: 0.9 | 1.0 | 1.1;
-  Speed: 0.9 | 1.0 | 1.1;
-  SpAttack: 0.9 | 1.0 | 1.1;
-  SpDefense: 0.9 | 1.0 | 1.1;
-}
-
 const Natures = Object.freeze({
-  Hardy: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Lonely: {
-    Attack: 1.1,
-    Defense: 0.9,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Brave: {
-    Attack: 1.1,
-    Defense: 1.0,
-    Speed: 0.9,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Adamant: {
-    Attack: 1.1,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 0.9,
-    SpDefense: 1.0,
-  },
-  Naughty: {
-    Attack: 1.1,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 0.9,
-  },
-  Bold: {
-    Attack: 0.9,
-    Defense: 1.1,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Docile: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Relaxed: {
-    Attack: 1.0,
-    Defense: 1.1,
-    Speed: 0.9,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Impish: {
-    Attack: 1.0,
-    Defense: 1.1,
-    Speed: 1.0,
-    SpAttack: 0.9,
-    SpDefense: 1.0,
-  },
-  Lax: {
-    Attack: 1.0,
-    Defense: 1.1,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 0.9,
-  },
-  Timid: {
-    Attack: 0.9,
-    Defense: 1.0,
-    Speed: 1.1,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Hasty: {
-    Attack: 1.0,
-    Defense: 0.9,
-    Speed: 1.1,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Serious: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Jolly: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.1,
-    SpAttack: 0.9,
-    SpDefense: 1.0,
-  },
-  Naive: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.1,
-    SpAttack: 1.0,
-    SpDefense: 0.9,
-  },
-  Modest: {
-    Attack: 0.9,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.1,
-    SpDefense: 1.0,
-  },
-  Mild: {
-    Attack: 1.0,
-    Defense: 0.9,
-    Speed: 1.0,
-    SpAttack: 1.1,
-    SpDefense: 1.0,
-  },
-  Quiet: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 0.9,
-    SpAttack: 1.1,
-    SpDefense: 1.0,
-  },
-  Bashful: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
-  Rash: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.1,
-    SpDefense: 0.9,
-  },
-  Calm: {
-    Attack: 0.9,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.1,
-  },
-  Gentle: {
-    Attack: 1.0,
-    Defense: 0.9,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.1,
-  },
-  Sassy: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 0.9,
-    SpAttack: 1.0,
-    SpDefense: 1.1,
-  },
-  Careful: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 0.9,
-    SpDefense: 1.1,
-  },
-  Quirky: {
-    Attack: 1.0,
-    Defense: 1.0,
-    Speed: 1.0,
-    SpAttack: 1.0,
-    SpDefense: 1.0,
-  },
+  Hardy: { Attack: -1, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 0 },
+  Lonely: { Attack: 1, Defense: -1, Speed: 0, SpAttack: 0, SpDefense: 0 },
+  Brave: { Attack: 1, Defense: 0, Speed: -1, SpAttack: 0, SpDefense: 0 },
+  Adamant: { Attack: 1, Defense: 0, Speed: 0, SpAttack: -1, SpDefense: 0 },
+  Naughty: { Attack: 1, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: -1 },
+  Bold: { Attack: -1, Defense: 1, Speed: 0, SpAttack: 0, SpDefense: 0 },
+  Docile: { Attack: 0, Defense: -1, Speed: 0, SpAttack: 0, SpDefense: 0 },
+  Relaxed: { Attack: 0, Defense: 1, Speed: -1, SpAttack: 0, SpDefense: 0 },
+  Impish: { Attack: 0, Defense: 1, Speed: 0, SpAttack: -1, SpDefense: 0 },
+  Lax: { Attack: 0, Defense: 1, Speed: 0, SpAttack: 0, SpDefense: -1 },
+  Timid: { Attack: -1, Defense: 0, Speed: 1, SpAttack: 0, SpDefense: 0 },
+  Hasty: { Attack: 0, Defense: -1, Speed: 1, SpAttack: 0, SpDefense: 0 },
+  Serious: { Attack: 0, Defense: 0, Speed: -1, SpAttack: 0, SpDefense: 0 },
+  Jolly: { Attack: 0, Defense: 0, Speed: 1, SpAttack: -1, SpDefense: 0 },
+  Naive: { Attack: 0, Defense: 0, Speed: 1, SpAttack: 0, SpDefense: -1 },
+  Modest: { Attack: -1, Defense: 0, Speed: 0, SpAttack: 1, SpDefense: 0 },
+  Mild: { Attack: 0, Defense: -1, Speed: 0, SpAttack: 1, SpDefense: 0 },
+  Quiet: { Attack: 0, Defense: 0, Speed: -1, SpAttack: 1, SpDefense: 0 },
+  Bashful: { Attack: 0, Defense: 0, Speed: 0, SpAttack: -1, SpDefense: 0 },
+  Rash: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 1, SpDefense: -1 },
+  Calm: { Attack: -1, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 1 },
+  Gentle: { Attack: 0, Defense: -1, Speed: 0, SpAttack: 0, SpDefense: 1 },
+  Sassy: { Attack: 0, Defense: 0, Speed: -1, SpAttack: 0, SpDefense: 1 },
+  Careful: { Attack: 0, Defense: 0, Speed: 0, SpAttack: -1, SpDefense: 1 },
+  Quirky: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: -1 },
 });
 
 const Characteristics = Object.freeze({
-  'Loves to eat': { Stat: 'HP', IVs: [0, 5, 10, 15, 20, 25, 30] },
-  'Proud of its power': { Stat: 'Attack', IVs: [0, 5, 10, 15, 20, 25, 30] },
-  'Sturdy body': { Stat: 'Defense', IVs: [0, 5, 10, 15, 20, 25, 30] },
-  'Likes to run': { Stat: 'Speed', IVs: [0, 5, 10, 15, 20, 25, 30] },
-  'Highly curious': { Stat: 'SpAttack', IVs: [0, 5, 10, 15, 20, 25, 30] },
-  'Strong willed': { Stat: 'SpDefense', IVs: [0, 5, 10, 15, 20, 25, 30] },
-  'Takes plenty of siestas': { Stat: 'HP', IVs: [1, 6, 11, 16, 21, 26, 31] },
-  'Likes to thrash about': { Stat: 'Attack', IVs: [1, 6, 11, 16, 21, 26, 31] },
-  'Capable of taking hits': {
-    Stat: 'Defense',
-    IVs: [1, 6, 11, 16, 21, 26, 31],
-  },
-  'Alert to sounds': { Stat: 'Speed', IVs: [1, 6, 11, 16, 21, 26, 31] },
-  'Mischievous': { Stat: 'SpAttack', IVs: [1, 6, 11, 16, 21, 26, 31] },
-  'Somewhat vain': { Stat: 'SpDefense', IVs: [1, 6, 11, 16, 21, 26, 31] },
-  'Nods off a lot': { Stat: 'HP', IVs: [2, 7, 12, 17, 22, 27] },
-  'A little quick tempered': { Stat: 'Attack', IVs: [2, 7, 12, 17, 22, 27] },
-  'Highly persistent': { Stat: 'Defense', IVs: [2, 7, 12, 17, 22, 27] },
-  'Impetuous and silly': { Stat: 'Speed', IVs: [2, 7, 12, 17, 22, 27] },
-  'Thoroughly cunning': { Stat: 'SpAttack', IVs: [2, 7, 12, 17, 22, 27] },
-  'Strongly defiant': { Stat: 'SpDefense', IVs: [2, 7, 12, 17, 22, 27] },
-  'Scatters things often': { Stat: 'HP', IVs: [3, 8, 13, 18, 23, 28] },
-  'Likes to fight': { Stat: 'Attack', IVs: [3, 8, 13, 18, 23, 28] },
-  'Good endurance': { Stat: 'Defense', IVs: [3, 8, 13, 18, 23, 28] },
-  'Somewhat of a clown': { Stat: 'Speed', IVs: [3, 8, 13, 18, 23, 28] },
-  'Often lost in thought': { Stat: 'SpAttack', IVs: [3, 8, 13, 18, 23, 28] },
-  'Hates to lose': { Stat: 'SpDefense', IVs: [3, 8, 13, 18, 23, 28] },
-  'Likes to relax': { Stat: 'HP', IVs: [4, 9, 14, 19, 24, 29] },
-  'Quick tempered': { Stat: 'Attack', IVs: [4, 9, 14, 19, 24, 29] },
-  'Good perseverance': { Stat: 'Defense', IVs: [4, 9, 14, 19, 24, 29] },
-  'Quick to flee': { Stat: 'Speed', IVs: [4, 9, 14, 19, 24, 29] },
-  'Very finicky': { Stat: 'SpAttack', IVs: [4, 9, 14, 19, 24, 29] },
-  'Somewhat stubborn': { Stat: 'SpDefense', IVs: [4, 9, 14, 19, 24, 29] },
+  'Loves to eat': { Stat: 'HP', IVModulo: 0 },
+  'Proud of its power': { Stat: 'Attack', IVModulo: 0 },
+  'Sturdy body': { Stat: 'Defense', IVModulo: 0 },
+  'Likes to run': { Stat: 'Speed', IVModulo: 0 },
+  'Highly curious': { Stat: 'SpAttack', IVModulo: 0 },
+  'Strong willed': { Stat: 'SpDefense', IVModulo: 0 },
+  'Takes plenty of siestas': { Stat: 'HP', IVModulo: 1 },
+  'Likes to thrash about': { Stat: 'Attack', IVModulo: 1 },
+  'Capable of taking hits': { Stat: 'Defense', IVModulo: 1 },
+  'Alert to sounds': { Stat: 'Speed', IVModulo: 1 },
+  'Mischievous': { Stat: 'SpAttack', IVModulo: 1 },
+  'Somewhat vain': { Stat: 'SpDefense', IVModulo: 1 },
+  'Nods off a lot': { Stat: 'HP', IVModulo: 2 },
+  'A little quick tempered': { Stat: 'Attack', IVModulo: 2 },
+  'Highly persistent': { Stat: 'Defense', IVModulo: 2 },
+  'Impetuous and silly': { Stat: 'Speed', IVModulo: 2 },
+  'Thoroughly cunning': { Stat: 'SpAttack', IVModulo: 2 },
+  'Strongly defiant': { Stat: 'SpDefense', IVModulo: 2 },
+  'Scatters things often': { Stat: 'HP', IVModulo: 3 },
+  'Likes to fight': { Stat: 'Attack', IVModulo: 3 },
+  'Good endurance': { Stat: 'Defense', IVModulo: 3 },
+  'Somewhat of a clown': { Stat: 'Speed', IVModulo: 3 },
+  'Often lost in thought': { Stat: 'SpAttack', IVModulo: 3 },
+  'Hates to lose': { Stat: 'SpDefense', IVModulo: 3 },
+  'Likes to relax': { Stat: 'HP', IVModulo: 4 },
+  'Quick tempered': { Stat: 'Attack', IVModulo: 4 },
+  'Good perseverance': { Stat: 'Defense', IVModulo: 4 },
+  'Quick to flee': { Stat: 'Speed', IVModulo: 4 },
+  'Very finicky': { Stat: 'SpAttack', IVModulo: 4 },
+  'Somewhat stubborn': { Stat: 'SpDefense', IVModulo: 4 },
 });
 
-function hpFormula(baseStat: number, iv: number, ev: number, level: number) {
+function calcHPStat(baseStat: number, iv: number, ev: number, level: number) {
   return (
     Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) +
     level +
@@ -286,33 +120,53 @@ function hpFormula(baseStat: number, iv: number, ev: number, level: number) {
   );
 }
 
-function otherStatFormula(
+function calcOtherStat(
   baseStat: number,
   iv: number,
   ev: number,
   level: number,
   nature: number,
 ) {
-  return Math.floor(
-    (Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5) *
-      nature,
-  );
+  const rawStat =
+    Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5;
+  switch (nature) {
+    case 1:
+      return Math.floor((rawStat * 110) / 100);
+    case -1:
+      return Math.floor((rawStat * 90) / 100);
+    default:
+      return rawStat;
+  }
 }
 
 function solveHPIV(baseStat: number, ev: number, level: number, stat: number) {
   return Math.ceil(
-    (stat - 10 - level) / (level / 100) - Math.floor(ev / 4) - 2 * baseStat,
+    (stat - level - 10) / (level / 100) - 2 * baseStat - Math.floor(ev / 4),
   );
 }
 
-function solveOtherIV(
+function solveOtherStatIV(
   baseStat: number,
   ev: number,
   level: number,
-  rawStat: number,
+  nature: number,
+  stat: number,
 ) {
+  let natureDiv: number;
+  switch (nature) {
+    case 1:
+      natureDiv = 1.1;
+      break;
+    case -1:
+      natureDiv = 0.9;
+      break;
+    default:
+      natureDiv = 1;
+  }
   return Math.ceil(
-    (rawStat - 5) / (level / 100) - Math.floor(ev / 4) - 2 * baseStat,
+    (Math.ceil(stat / natureDiv) - 5) / (level / 100) -
+      2 * baseStat -
+      Math.floor(ev / 4),
   );
 }
 
@@ -320,130 +174,81 @@ function clampIV(iv: number) {
   return Math.min(Math.max(iv, 0), 31);
 }
 
-function createIVRange(lowerBound: number, upperBound: number) {
-  const lower = clampIV(lowerBound);
-  const upper = clampIV(upperBound);
-  const ivRange: number[] = [];
-  for (let iv = lower; iv <= upper; iv++) {
-    ivRange.push(iv);
-  }
-  return ivRange;
-}
-
-function isStatValid(
-  isHPStat: boolean,
-  baseStat: number,
-  ev: number,
-  level: number,
-  nature: number,
-  stat: number,
-) {
-  let lowerBound: number;
-  let upperBound: number;
-  if (isHPStat) {
-    lowerBound = hpFormula(baseStat, 0, ev, level);
-    upperBound = hpFormula(baseStat, 31, ev, level);
+function validateStat(lower: number, upper: number, stat: number) {
+  if (lower <= stat && stat <= upper) {
+    return true;
   } else {
-    lowerBound = otherStatFormula(baseStat, 0, ev, level, nature);
-    upperBound = otherStatFormula(baseStat, 31, ev, level, nature);
-  }
-  if (!(stat >= lowerBound && stat <= upperBound)) {
     return false;
   }
-  return true;
 }
 
-function calcHPIVRange(
+function validateHPStat(
   baseStat: number,
   ev: number,
   level: number,
   stat: number,
+  ivRange: number[],
 ) {
-  if (!isStatValid(true, baseStat, ev, level, null, stat)) {
-    return [];
-  }
-  return createIVRange(
-    solveHPIV(baseStat, ev, level, stat),
-    solveHPIV(baseStat, ev, level, stat + 1) - 1,
-  );
+  const lower = calcHPStat(baseStat, ivRange[0], ev, level);
+  const upper = calcHPStat(baseStat, ivRange[ivRange.length - 1], ev, level);
+  return validateStat(lower, upper, stat);
 }
 
-function calcOtherStatIVRange(
+function validateOtherStat(
   baseStat: number,
   ev: number,
   level: number,
   nature: number,
   stat: number,
+  ivRange: number[],
 ) {
-  if (!isStatValid(false, baseStat, ev, level, nature, stat)) {
-    return [];
+  const lower = calcOtherStat(baseStat, ivRange[0], ev, level, nature);
+  const upper = calcOtherStat(
+    baseStat,
+    ivRange[ivRange.length - 1],
+    ev,
+    level,
+    nature,
+  );
+  return validateStat(lower, upper, stat);
+}
+
+function calcHPRange(
+  baseStat: number,
+  ev: number,
+  level: number,
+  stat: number,
+  ivRange: number[],
+): [number, number] {
+  if (validateHPStat(baseStat, ev, level, stat, ivRange)) {
+    return [
+      clampIV(solveHPIV(baseStat, ev, level, stat)),
+      clampIV(solveHPIV(baseStat, ev, level, stat + 1) - 1),
+    ];
+  } else {
+    return [null, null];
   }
-  const rawStatLower = Math.ceil(stat / nature);
-  const rawStatUpper = Math.ceil((stat + 1) / nature);
-  return createIVRange(
-    solveOtherIV(baseStat, ev, level, rawStatLower),
-    solveOtherIV(baseStat, ev, level, rawStatUpper) - 1,
-  );
 }
 
-function getIVRanges(
-  baseStats: BaseStats,
-  nature: NatureModifiers,
-  statLevel: StatLevel,
-) {
-  const hp = calcHPIVRange(
-    baseStats.HP,
-    statLevel.HPEV,
-    statLevel.Level,
-    statLevel.HP,
-  );
-  const attack = calcOtherStatIVRange(
-    baseStats.Attack,
-    statLevel.AttackEV,
-    statLevel.Level,
-    nature.Attack,
-    statLevel.Attack,
-  );
-  const defense = calcOtherStatIVRange(
-    baseStats.Defense,
-    statLevel.DefenseEV,
-    statLevel.Level,
-    nature.Defense,
-    statLevel.Defense,
-  );
-  const spAttack = calcOtherStatIVRange(
-    baseStats.SpAttack,
-    statLevel.SpAttackEV,
-    statLevel.Level,
-    nature.SpAttack,
-    statLevel.SpAttack,
-  );
-  const spDefense = calcOtherStatIVRange(
-    baseStats.SpDefense,
-    statLevel.SpDefenseEV,
-    statLevel.Level,
-    nature.SpDefense,
-    statLevel.SpDefense,
-  );
-  const speed = calcOtherStatIVRange(
-    baseStats.Speed,
-    statLevel.SpeedEV,
-    statLevel.Level,
-    nature.Speed,
-    statLevel.Speed,
-  );
-  return [hp, attack, defense, spAttack, spDefense, speed];
+function calcOtherStatRange(
+  baseStat: number,
+  ev: number,
+  level: number,
+  nature: number,
+  stat: number,
+  ivRange: number[],
+): [number, number] {
+  if (validateOtherStat(baseStat, ev, level, nature, stat, ivRange)) {
+    return [
+      clampIV(solveOtherStatIV(baseStat, ev, level, nature, stat)),
+      clampIV(solveOtherStatIV(baseStat, ev, level, nature, stat + 1) - 1),
+    ];
+  } else {
+    return [null, null];
+  }
 }
 
-function narrowByHiddenPower(
-  hpIVRange: number[],
-  atkIVRange: number[],
-  defIVRange: number[],
-  speIVRange: number[],
-  spaIVRange: number[],
-  spdIVRange: number[],
-  targetHPType: string,
-) {
+function narrowByHiddenPower(targetHPType: string) {
   const TYPES = {
     0: 'Fighting',
     1: 'Flying',
@@ -462,12 +267,14 @@ function narrowByHiddenPower(
     14: 'Dragon',
     15: 'Dark',
   };
-  const hpRange: Set<number> = new Set();
-  const atkRange: Set<number> = new Set();
-  const defRange: Set<number> = new Set();
-  const speRange: Set<number> = new Set();
-  const spaRange: Set<number> = new Set();
-  const spdRange: Set<number> = new Set();
+  const lsbRanges = {
+    HP: new Set() as Set<number>,
+    Attack: new Set() as Set<number>,
+    Defense: new Set() as Set<number>,
+    SpAttack: new Set() as Set<number>,
+    SpDefense: new Set() as Set<number>,
+    Speed: new Set() as Set<number>,
+  };
   /*
    *  Below loops through all possible combinations of LSBs of the
    *  six stats. This creates a lookup table on the fly for
@@ -490,240 +297,177 @@ function narrowByHiddenPower(
                   63,
               );
               if (!(TYPES[hpType] === targetHPType)) continue;
-              hpRange.add(hpLSB);
-              atkRange.add(atkLSB);
-              defRange.add(defLSB);
-              speRange.add(speLSB);
-              spaRange.add(spaLSB);
-              spdRange.add(spdLSB);
+              lsbRanges.HP.add(hpLSB);
+              lsbRanges.Attack.add(atkLSB);
+              lsbRanges.Defense.add(defLSB);
+              lsbRanges.SpAttack.add(spaLSB);
+              lsbRanges.SpDefense.add(spdLSB);
+              lsbRanges.Speed.add(speLSB);
             }
           }
         }
       }
     }
   }
-  return [
-    hpIVRange.filter(iv => hpRange.has(iv & 1)),
-    atkIVRange.filter(iv => atkRange.has(iv & 1)),
-    defIVRange.filter(iv => defRange.has(iv & 1)),
-    speIVRange.filter(iv => speRange.has(iv & 1)),
-    spaIVRange.filter(iv => spaRange.has(iv & 1)),
-    spdIVRange.filter(iv => spdRange.has(iv & 1)),
-  ];
+  return lsbRanges;
 }
 
-function getNextLevel(
+export function getNextLevel(
   stat: Stat,
   baseStat: number,
   ivRange: number[],
   ev: number,
   lastStatLevel: number,
-  nature: number,
+  natureName: string,
 ) {
   // Protect against infinite loops in zero-length arrays
   if (!(ivRange.length > 0)) {
     return null;
-  } else if (!(ivRange.length > 1)) {
-    return lastStatLevel;
   }
   // Assuming EVs won't change is a lot easier to program,
   // and leads to less unexpected results
   let level = lastStatLevel;
-  const calcFormula = stat === 'HP' ? hpFormula : otherStatFormula;
-  do {
-    level += 1;
-  } while (
+  const statCalc = stat === 'HP' ? calcHPStat : calcOtherStat;
+  // calcHPStat does not take this parameter, so no errors would
+  // be caused if this is undefined
+  const nature: number = (Natures[natureName] ?? {})[stat];
+  while (
     ivRange
-      .map(iv => calcFormula(baseStat, iv, ev, level, nature))
-      .every((result, _, arr) => result === arr[0])
-  );
+      .map(iv => statCalc(baseStat, iv, ev, level, nature))
+      .every((result, _, arr) => result === arr[0]) &&
+    ivRange.length > 1
+  ) {
+    level += 1;
+  }
   return level;
 }
 
-export function calculateIVs(
+export function calcIVRanges(
   baseStats: BaseStats,
   statLevels: StatLevel[],
-  natureInput: string,
+  natureName: string,
   characteristicInput: string,
   hiddenPower: string,
-): [
-  number[],
-  number[],
-  number[],
-  number[],
-  number[],
-  number[],
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-] {
-  const [
-    hpIVRange,
-    atkIVRange,
-    defIVRange,
-    spaIVRange,
-    spdIVRange,
-    speIVRange,
-  ] = getIVRanges(baseStats, Natures[natureInput], statLevels[0]);
-  const checkIVMembership = (arr: number[], l: number[]) => {
-    for (let i = arr.length - 1; i >= 0; i--) {
-      if (!l.includes(arr[i])) {
-        arr.splice(i, 1);
-      }
-    }
+) {
+  const ivRanges = {
+    HP: [...Array(32).keys()],
+    Attack: [...Array(32).keys()],
+    Defense: [...Array(32).keys()],
+    SpAttack: [...Array(32).keys()],
+    SpDefense: [...Array(32).keys()],
+    Speed: [...Array(32).keys()],
   };
-  if (statLevels.length > 1) {
-    for (const statLevel of statLevels.slice(1)) {
-      for (const [ivRange, newIVRange] of getIVRanges(
-        baseStats,
-        Natures[natureInput],
-        statLevel,
-      ).map((_ivRange, i) => [
-        [hpIVRange, atkIVRange, defIVRange, spaIVRange, spdIVRange, speIVRange][
-          i
-        ],
-        _ivRange,
-      ])) {
-        for (let i = ivRange.length - 1; i >= 0; i--) {
-          if (!newIVRange.includes(ivRange[i])) {
-            ivRange.splice(i, 1);
-          }
+  for (const stats of statLevels) {
+    const calcResults = {
+      HP: calcHPRange(
+        baseStats.HP,
+        stats.HPEV,
+        stats.Level,
+        stats.HP,
+        ivRanges.HP,
+      ),
+      Attack: calcOtherStatRange(
+        baseStats.Attack,
+        stats.AttackEV,
+        stats.Level,
+        Natures[natureName].Attack,
+        stats.Attack,
+        ivRanges.Attack,
+      ),
+      Defense: calcOtherStatRange(
+        baseStats.Defense,
+        stats.DefenseEV,
+        stats.Level,
+        Natures[natureName].Defense,
+        stats.Defense,
+        ivRanges.Defense,
+      ),
+      SpAttack: calcOtherStatRange(
+        baseStats.SpAttack,
+        stats.SpAttackEV,
+        stats.Level,
+        Natures[natureName].SpAttack,
+        stats.SpAttack,
+        ivRanges.SpAttack,
+      ),
+      SpDefense: calcOtherStatRange(
+        baseStats.SpDefense,
+        stats.SpDefenseEV,
+        stats.Level,
+        Natures[natureName].SpDefense,
+        stats.SpDefense,
+        ivRanges.SpDefense,
+      ),
+      Speed: calcOtherStatRange(
+        baseStats.Speed,
+        stats.SpeedEV,
+        stats.Level,
+        Natures[natureName].Speed,
+        stats.Speed,
+        ivRanges.Speed,
+      ),
+    };
+    for (const [stat, ivRange] of Object.entries(ivRanges)) {
+      const [minIV, maxIV] = calcResults[stat] as [number, number];
+      for (let i = ivRange.length - 1; i >= 0; i--) {
+        if (
+          minIV === null ||
+          maxIV === null ||
+          !(minIV <= ivRange[i] && ivRange[i] <= maxIV)
+        ) {
+          ivRange.splice(i, 1);
         }
       }
     }
   }
   if (hiddenPower !== null) {
-    for (const [ivRange, newIVRange] of narrowByHiddenPower(
-      hpIVRange,
-      atkIVRange,
-      defIVRange,
-      speIVRange,
-      spaIVRange,
-      spdIVRange,
-      hiddenPower,
-    ).map((_ivRange, i) => [
-      [hpIVRange, atkIVRange, defIVRange, speIVRange, spaIVRange, spdIVRange][
-        i
-      ],
-      _ivRange,
-    ])) {
+    const calcResults = narrowByHiddenPower(hiddenPower);
+    for (const [stat, ivRange] of Object.entries(ivRanges)) {
+      const lsbRange = calcResults[stat] as Set<number>;
       for (let i = ivRange.length - 1; i >= 0; i--) {
-        if (!newIVRange.includes(ivRange[i])) {
+        if (!lsbRange.has(ivRange[i] & 1)) {
           ivRange.splice(i, 1);
         }
       }
     }
   }
   if (characteristicInput !== null && characteristicInput in Characteristics) {
+    const highestStat: Stat = Characteristics[characteristicInput].Stat;
+    const ivModulo: number = Characteristics[characteristicInput].IVModulo;
     let highestIV = [
-      ...hpIVRange,
-      ...atkIVRange,
-      ...defIVRange,
-      ...spaIVRange,
-      ...spdIVRange,
-      ...speIVRange,
-    ].reduce((prev, value) => Math.max(prev, value));
-    const characteristic: Characteristic = Characteristics[characteristicInput];
-    const charIVRange = characteristic.IVs.filter(value => value <= highestIV);
-    highestIV = charIVRange[charIVRange.length - 1];
-    for (const ivRange of [
-      hpIVRange,
-      atkIVRange,
-      defIVRange,
-      spaIVRange,
-      spdIVRange,
-      speIVRange,
-    ]) {
+      ...ivRanges.HP,
+      ...ivRanges.Attack,
+      ...ivRanges.Defense,
+      ...ivRanges.SpAttack,
+      ...ivRanges.SpDefense,
+      ...ivRanges.Speed,
+    ].reduce((x, y) => Math.max(x, y));
+    if (highestIV % 5 > ivModulo) {
+      highestIV = highestIV - ((highestIV % 5) - ivModulo);
+    }
+    if (highestIV % 5 < ivModulo) {
+      highestIV = highestIV - (highestIV % 5) - (5 - ivModulo);
+    }
+    const calcRange: number[] = [];
+    for (let i = 0; i <= (highestIV - (highestIV % 5)) / 5; i++) {
+      const iv = i * 5 + ivModulo;
+      if (iv <= highestIV) {
+        calcRange.push(iv);
+      }
+    }
+    for (const stat of Object.keys(ivRanges)) {
+      const ivRange: number[] = ivRanges[stat];
       for (let i = ivRange.length - 1; i >= 0; i--) {
         if (ivRange[i] > highestIV) {
           ivRange.splice(i, 1);
         }
       }
     }
-    switch (characteristic.Stat) {
-      case 'HP':
-        checkIVMembership(hpIVRange, charIVRange);
-        break;
-      case 'Attack':
-        checkIVMembership(atkIVRange, charIVRange);
-        break;
-      case 'Defense':
-        checkIVMembership(defIVRange, charIVRange);
-        break;
-      case 'SpAttack':
-        checkIVMembership(spaIVRange, charIVRange);
-        break;
-      case 'SpDefense':
-        checkIVMembership(spdIVRange, charIVRange);
-        break;
-      case 'Speed':
-        checkIVMembership(speIVRange, charIVRange);
-        break;
+    for (let i = ivRanges[highestStat].length - 1; i >= 0; i--) {
+      if (!calcRange.includes(ivRanges[highestStat][i])) {
+        ivRanges[highestStat].splice(i, 1);
+      }
     }
   }
-  const nextHPLevel = getNextLevel(
-    'HP',
-    baseStats.HP,
-    hpIVRange,
-    statLevels[statLevels.length - 1].HPEV,
-    statLevels[statLevels.length - 1].Level,
-    null,
-  );
-  const nextAtkLevel = getNextLevel(
-    'Attack',
-    baseStats.Attack,
-    atkIVRange,
-    statLevels[statLevels.length - 1].AttackEV,
-    statLevels[statLevels.length - 1].Level,
-    Natures[natureInput].Attack,
-  );
-  const nextDefLevel = getNextLevel(
-    'Defense',
-    baseStats.Defense,
-    defIVRange,
-    statLevels[statLevels.length - 1].DefenseEV,
-    statLevels[statLevels.length - 1].Level,
-    Natures[natureInput].Defense,
-  );
-  const nextSpALevel = getNextLevel(
-    'SpAttack',
-    baseStats.SpAttack,
-    spaIVRange,
-    statLevels[statLevels.length - 1].SpAttackEV,
-    statLevels[statLevels.length - 1].Level,
-    Natures[natureInput].SpAttack,
-  );
-  const nextSpDLevel = getNextLevel(
-    'SpDefense',
-    baseStats.SpDefense,
-    spdIVRange,
-    statLevels[statLevels.length - 1].SpDefenseEV,
-    statLevels[statLevels.length - 1].Level,
-    Natures[natureInput].SpDefense,
-  );
-  const nextSpeLevel = getNextLevel(
-    'Speed',
-    baseStats.Speed,
-    speIVRange,
-    statLevels[statLevels.length - 1].SpeedEV,
-    statLevels[statLevels.length - 1].Level,
-    Natures[natureInput].Speed,
-  );
-  return [
-    hpIVRange,
-    atkIVRange,
-    defIVRange,
-    spaIVRange,
-    spdIVRange,
-    speIVRange,
-    nextHPLevel,
-    nextAtkLevel,
-    nextDefLevel,
-    nextSpALevel,
-    nextSpDLevel,
-    nextSpeLevel,
-  ];
+  return ivRanges;
 }

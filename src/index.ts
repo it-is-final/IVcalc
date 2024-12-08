@@ -364,7 +364,7 @@ mainForm.addEventListener('submit', function (e) {
         attack = statLevel[1];
         defense = statLevel[2];
         spAttack = statLevel[3];
-        defense = statLevel[4];
+        spDefense = statLevel[4];
         speed = statLevel[5];
         break;
       case 'diff':

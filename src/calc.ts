@@ -182,37 +182,6 @@ function validateStat(lower: number, upper: number, stat: number) {
   }
 }
 
-function validateHPStat(
-  baseStat: number,
-  ev: number,
-  level: number,
-  stat: number,
-  ivRange: number[],
-) {
-  const lower = calcHPStat(baseStat, ivRange[0], ev, level);
-  const upper = calcHPStat(baseStat, ivRange[ivRange.length - 1], ev, level);
-  return validateStat(lower, upper, stat);
-}
-
-function validateOtherStat(
-  baseStat: number,
-  ev: number,
-  level: number,
-  nature: number,
-  stat: number,
-  ivRange: number[],
-) {
-  const lower = calcOtherStat(baseStat, ivRange[0], ev, level, nature);
-  const upper = calcOtherStat(
-    baseStat,
-    ivRange[ivRange.length - 1],
-    ev,
-    level,
-    nature,
-  );
-  return validateStat(lower, upper, stat);
-}
-
 function calcHPRange(
   baseStat: number,
   ev: number,
@@ -220,7 +189,13 @@ function calcHPRange(
   stat: number,
   ivRange: number[],
 ): [number, number] {
-  if (validateHPStat(baseStat, ev, level, stat, ivRange)) {
+  if (
+    validateStat(
+      calcHPStat(baseStat, ivRange[0], ev, level),
+      calcHPStat(baseStat, ivRange[ivRange.length - 1], ev, level),
+      stat,
+    )
+  ) {
     return [
       clampIV(solveHPIV(baseStat, ev, level, stat)),
       clampIV(solveHPIV(baseStat, ev, level, stat + 1) - 1),
@@ -238,7 +213,13 @@ function calcOtherStatRange(
   stat: number,
   ivRange: number[],
 ): [number, number] {
-  if (validateOtherStat(baseStat, ev, level, nature, stat, ivRange)) {
+  if (
+    validateStat(
+      calcOtherStat(baseStat, ivRange[0], ev, level, nature),
+      calcOtherStat(baseStat, ivRange[ivRange.length - 1], ev, level, nature),
+      stat,
+    )
+  ) {
     return [
       clampIV(solveOtherStatIV(baseStat, ev, level, nature, stat)),
       clampIV(solveOtherStatIV(baseStat, ev, level, nature, stat + 1) - 1),
@@ -436,12 +417,11 @@ export function calcIVRanges(
       highestIV -= (highestIV % 5) + (5 - ivModulo);
     }
     const calcRange: number[] = [];
-    for (let i = 0; i <= (highestIV - (highestIV % 5)) / 5; i++) {
+    for (let i = 0; i <= Math.floor(highestIV / 5); i++) {
       const iv = i * 5 + ivModulo;
       calcRange.push(iv);
     }
-    for (const stat of Object.keys(ivRanges)) {
-      const ivRange: number[] = ivRanges[stat];
+    for (const [stat, ivRange] of Object.entries(ivRanges)) {
       for (let i = ivRange.length - 1; i >= 0; i--) {
         if (
           (stat === highestStat && !calcRange.includes(ivRange[i])) ||

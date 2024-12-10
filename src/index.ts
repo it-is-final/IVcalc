@@ -335,7 +335,7 @@ mainForm.addEventListener('submit', function (e) {
     );
     return;
   }
-  let level = Number(params.get('initialLevel'));
+  const initialLevel = Number(params.get('initialLevel'));
   const baseStats = {
     HP: Number(params.get('baseHP')),
     Attack: Number(params.get('baseAtk')),
@@ -387,13 +387,10 @@ mainForm.addEventListener('submit', function (e) {
       return;
     }
     // Hard pass initial stats as 'exact' mode
-    const calcMode =
-      level !== Number(params.get('initialLevel'))
-        ? (params.get('calcMode') as string)
-        : 'exact';
+    const calcMode = i !== 0 ? (params.get('calcMode') as string) : 'exact';
     const stats = mapStatLevel(statLevel, calcMode);
     statLevels.push({
-      Level: level,
+      Level: initialLevel + i,
       Stats: stats,
       EV: {
         HP: statLevel[6] ?? 0,
@@ -404,7 +401,6 @@ mainForm.addEventListener('submit', function (e) {
         Speed: statLevel[11] ?? 0,
       },
     });
-    level += 1;
   }
   const ivRanges = calcIVRanges(
     baseStats,

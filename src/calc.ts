@@ -56,31 +56,31 @@ export interface StatLevel {
 }
 
 const Natures = Object.freeze({
-  Hardy: { Attack: -1, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 0 },
+  Hardy: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 0 },
   Lonely: { Attack: 1, Defense: -1, Speed: 0, SpAttack: 0, SpDefense: 0 },
   Brave: { Attack: 1, Defense: 0, Speed: -1, SpAttack: 0, SpDefense: 0 },
   Adamant: { Attack: 1, Defense: 0, Speed: 0, SpAttack: -1, SpDefense: 0 },
   Naughty: { Attack: 1, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: -1 },
   Bold: { Attack: -1, Defense: 1, Speed: 0, SpAttack: 0, SpDefense: 0 },
-  Docile: { Attack: 0, Defense: -1, Speed: 0, SpAttack: 0, SpDefense: 0 },
+  Docile: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 0 },
   Relaxed: { Attack: 0, Defense: 1, Speed: -1, SpAttack: 0, SpDefense: 0 },
   Impish: { Attack: 0, Defense: 1, Speed: 0, SpAttack: -1, SpDefense: 0 },
   Lax: { Attack: 0, Defense: 1, Speed: 0, SpAttack: 0, SpDefense: -1 },
   Timid: { Attack: -1, Defense: 0, Speed: 1, SpAttack: 0, SpDefense: 0 },
   Hasty: { Attack: 0, Defense: -1, Speed: 1, SpAttack: 0, SpDefense: 0 },
-  Serious: { Attack: 0, Defense: 0, Speed: -1, SpAttack: 0, SpDefense: 0 },
+  Serious: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 0 },
   Jolly: { Attack: 0, Defense: 0, Speed: 1, SpAttack: -1, SpDefense: 0 },
   Naive: { Attack: 0, Defense: 0, Speed: 1, SpAttack: 0, SpDefense: -1 },
   Modest: { Attack: -1, Defense: 0, Speed: 0, SpAttack: 1, SpDefense: 0 },
   Mild: { Attack: 0, Defense: -1, Speed: 0, SpAttack: 1, SpDefense: 0 },
   Quiet: { Attack: 0, Defense: 0, Speed: -1, SpAttack: 1, SpDefense: 0 },
-  Bashful: { Attack: 0, Defense: 0, Speed: 0, SpAttack: -1, SpDefense: 0 },
+  Bashful: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 0 },
   Rash: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 1, SpDefense: -1 },
   Calm: { Attack: -1, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 1 },
   Gentle: { Attack: 0, Defense: -1, Speed: 0, SpAttack: 0, SpDefense: 1 },
   Sassy: { Attack: 0, Defense: 0, Speed: -1, SpAttack: 0, SpDefense: 1 },
   Careful: { Attack: 0, Defense: 0, Speed: 0, SpAttack: -1, SpDefense: 1 },
-  Quirky: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: -1 },
+  Quirky: { Attack: 0, Defense: 0, Speed: 0, SpAttack: 0, SpDefense: 0 },
 });
 
 const Characteristics = Object.freeze({

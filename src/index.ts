@@ -354,12 +354,12 @@ mainForm.addEventListener('submit', function (e) {
       Speed: 5,
     };
     const monStats = {
-      HP: null as number,
-      Attack: null as number,
-      Defense: null as number,
-      SpAttack: null as number,
-      SpDefense: null as number,
-      Speed: null as number,
+      HP: Number(),
+      Attack: Number(),
+      Defense: Number(),
+      SpAttack: Number(),
+      SpDefense: Number(),
+      Speed: Number(),
     };
     for (const stat of Object.keys(monStats)) {
       const input = statLevel[statLevelIndex[stat] as number];

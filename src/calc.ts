@@ -163,12 +163,12 @@ function narrowByHiddenPower(hiddenPower: string) {
     15: 'Dark',
   };
   const lsbRanges = {
-    HP: new Set() as Set<number>,
-    Attack: new Set() as Set<number>,
-    Defense: new Set() as Set<number>,
-    SpAttack: new Set() as Set<number>,
-    SpDefense: new Set() as Set<number>,
-    Speed: new Set() as Set<number>,
+    HP: new Set<number>(),
+    Attack: new Set<number>(),
+    Defense: new Set<number>(),
+    SpAttack: new Set<number>(),
+    SpDefense: new Set<number>(),
+    Speed: new Set<number>(),
   };
   /*
    *  Below loops through all possible combinations of LSBs of the

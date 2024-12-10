@@ -388,10 +388,9 @@ mainForm.addEventListener('submit', function (e) {
     }
     // Hard pass initial stats as 'exact' mode
     const calcMode = i !== 0 ? (params.get('calcMode') as string) : 'exact';
-    const stats = mapStatLevel(statLevel, calcMode);
     statLevels.push({
       Level: initialLevel + i,
-      Stats: stats,
+      Stats: mapStatLevel(statLevel, calcMode),
       EV: {
         HP: statLevel[6] ?? 0,
         Attack: statLevel[7] ?? 0,

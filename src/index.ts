@@ -378,8 +378,8 @@ mainForm.addEventListener('submit', function (e) {
     }
     return monStats;
   };
-  for (const statLevel of statInput) {
-    if (statLevel.length === 1 && statLevel.includes(null)) {
+  for (const [i, statLevel] of statInput.entries()) {
+    if (statLevel.length === 1 && statLevel.includes(null) && i !== 0) {
       continue;
     }
     if (statLevel.length !== (params.get('useEVs') ? 12 : 6)) {

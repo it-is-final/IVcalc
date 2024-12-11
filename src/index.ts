@@ -322,6 +322,7 @@ mainForm.addEventListener('submit', function (e) {
       .map(level =>
         level.split(' ').map(stat => (stat !== '' ? Number(stat) : null)),
       );
+  const isShedinja = monSelect.value === 'Shedinja' ? true : false;
   if (
     params.get('baseHP') === '' ||
     params.get('baseAtk') === '' ||
@@ -407,6 +408,7 @@ mainForm.addEventListener('submit', function (e) {
     params.get('nature') as string,
     (params.get('characteristic') as string) || null,
     (params.get('hiddenPower') as string) || null,
+    isShedinja,
   );
   const nextLevels = {
     HP: getNextLevel(
@@ -415,7 +417,8 @@ mainForm.addEventListener('submit', function (e) {
       ivRanges.HP,
       statLevels[statLevels.length - 1].EV.HP,
       statLevels[statLevels.length - 1].Level,
-      null,
+      params.get('nature') as string,
+      isShedinja,
     ),
     Attack: getNextLevel(
       'Attack',
@@ -424,6 +427,7 @@ mainForm.addEventListener('submit', function (e) {
       statLevels[statLevels.length - 1].EV.Attack,
       statLevels[statLevels.length - 1].Level,
       params.get('nature') as string,
+      isShedinja,
     ),
     Defense: getNextLevel(
       'Defense',
@@ -432,6 +436,7 @@ mainForm.addEventListener('submit', function (e) {
       statLevels[statLevels.length - 1].EV.Defense,
       statLevels[statLevels.length - 1].Level,
       params.get('nature') as string,
+      isShedinja,
     ),
     SpAttack: getNextLevel(
       'SpAttack',
@@ -440,6 +445,7 @@ mainForm.addEventListener('submit', function (e) {
       statLevels[statLevels.length - 1].EV.SpAttack,
       statLevels[statLevels.length - 1].Level,
       params.get('nature') as string,
+      isShedinja,
     ),
     SpDefense: getNextLevel(
       'SpDefense',
@@ -448,6 +454,7 @@ mainForm.addEventListener('submit', function (e) {
       statLevels[statLevels.length - 1].EV.SpDefense,
       statLevels[statLevels.length - 1].Level,
       params.get('nature') as string,
+      isShedinja,
     ),
     Speed: getNextLevel(
       'Speed',
@@ -456,6 +463,7 @@ mainForm.addEventListener('submit', function (e) {
       statLevels[statLevels.length - 1].EV.Speed,
       statLevels[statLevels.length - 1].Level,
       params.get('nature') as string,
+      isShedinja,
     ),
   };
   const formatOutputIVs = (ivRange: number[]) => {

@@ -116,12 +116,23 @@ const Characteristics = Object.freeze({
   'Somewhat stubborn': { Stat: 'SpDefense', IVModulo: 4 },
 });
 
-function calcHPStat(baseStat: number, iv: number, ev: number, level: number) {
-  return (
-    Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) +
-    level +
-    10
-  );
+function calcHPStat(
+  baseStat: number,
+  iv: number,
+  ev: number,
+  level: number,
+  // only a number so that it works with calcOtherStat
+  isShedinja: number,
+) {
+  if (isShedinja === 0) {
+    return (
+      Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) +
+      level +
+      10
+    );
+  } else {
+    return 1;
+  }
 }
 
 function calcOtherStat(
@@ -214,6 +225,7 @@ export function getNextLevel(
   ev: number,
   lastStatLevel: number,
   natureName: string,
+  isShedinja: boolean,
 ) {
   // Protect against infinite loops in zero-length arrays
   if (!(ivRange.length > 0)) {
@@ -222,15 +234,23 @@ export function getNextLevel(
   // Assuming EVs won't change is a lot easier to program,
   // and leads to less unexpected results
   let level = lastStatLevel;
-  const statCalc = stat === 'HP' ? calcHPStat : calcOtherStat;
+  if (isShedinja && stat === 'HP') {
+    return level;
+  }
+  if (ivRange.length <= 1) {
+    return level;
+  }
   // calcHPStat does not take this parameter, so no errors would
   // be caused if this is undefined
-  const nature: number = (Natures[natureName] ?? {})[stat];
+  const nature: number = Natures[natureName][stat];
   while (
     ivRange
-      .map(iv => statCalc(baseStat, iv, ev, level, nature))
-      .every((result, _, arr) => result === arr[0]) &&
-    ivRange.length > 1
+      .map(iv =>
+        stat === 'HP'
+          ? calcHPStat(baseStat, iv, ev, level, Number(isShedinja))
+          : calcOtherStat(baseStat, iv, ev, level, nature),
+      )
+      .every((result, _, arr) => result === arr[0])
   ) {
     level += 1;
   }
@@ -243,6 +263,7 @@ export function calcIVRanges(
   natureName: string,
   characteristicInput: string,
   hiddenPower: string,
+  isShedinja: boolean,
 ) {
   const ivRanges = {
     HP: [...Array(32).keys()],
@@ -254,16 +275,17 @@ export function calcIVRanges(
   };
   for (const stats of statLevels) {
     for (const [stat, ivRange] of Object.entries(ivRanges)) {
-      const statCalc = stat === 'HP' ? calcHPStat : calcOtherStat;
       for (let i = ivRange.length - 1; i >= 0; i--) {
+        const args: [number, number, number, number, number] = [
+          baseStats[stat],
+          ivRange[i],
+          stats.EV[stat],
+          stats.Level,
+          stat !== 'HP' ? Natures[natureName][stat] : Number(isShedinja),
+        ];
         if (
-          statCalc(
-            baseStats[stat],
-            ivRange[i],
-            stats.EV[stat],
-            stats.Level,
-            Natures[natureName][stat] ?? null,
-          ) !== stats.Stats[stat]
+          (stat === 'HP' ? calcHPStat(...args) : calcOtherStat(...args)) !==
+          stats.Stats[stat]
         ) {
           ivRange.splice(i, 1);
         }

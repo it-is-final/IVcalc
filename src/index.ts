@@ -322,7 +322,7 @@ mainForm.addEventListener('submit', function (e) {
       .map(level =>
         level.split(' ').map(stat => (stat !== '' ? Number(stat) : null)),
       );
-  const isShedinja = monSelect.value === 'Shedinja' ? true : false;
+  const isShedinja = monSelect.value === 'Shedinja';
   if (
     params.get('baseHP') === '' ||
     params.get('baseAtk') === '' ||

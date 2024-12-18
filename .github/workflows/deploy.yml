@@ -24,7 +24,7 @@ jobs:
         run: npm ci
       # Different build commands are being used so that the JS is minified and to preference native copy commands over shx
       - name: Build script.js
-        run: npx esbuild src/index.ts --bundle --minify --outfile=dist/index.js
+        run: npx esbuild src/index.ts --bundle --outfile=dist/index.js
       - name: Prepare HTML, CSS and CSV
         run: cp -r src/html/* assets dist/
       - name: Upload static files as artifact

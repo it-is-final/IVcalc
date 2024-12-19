@@ -154,6 +154,35 @@ function calcOtherStat(
   }
 }
 
+function calcHPIV(baseStat: number, ev: number, level: number, stat: number) {
+  return Math.ceil(
+    (stat - level - 10) / (level / 100) - 2 * baseStat - Math.floor(ev / 4),
+  );
+}
+
+function calcOtherStatIV(
+  baseStat: number,
+  ev: number,
+  level: number,
+  stat: number,
+  nature: number,
+) {
+  let rawStat: number;
+  switch (nature) {
+    case 1:
+      rawStat = Math.ceil(stat / 1.1);
+      break;
+    case -1:
+      rawStat = Math.ceil(stat / 0.9);
+      break;
+    default:
+      rawStat = stat;
+  }
+  return Math.ceil(
+    (rawStat - 5) / (level / 100) - 2 * baseStat - Math.floor(ev / 4),
+  );
+}
+
 function narrowByHiddenPower(hiddenPower: string) {
   const HiddenPowerTypes = {
     Fighting: 0,
@@ -253,30 +282,98 @@ export function calcIVRanges(
   isShedinja: boolean,
 ) {
   const ivRanges = {
-    HP: [...Array(32).keys()],
-    Attack: [...Array(32).keys()],
-    Defense: [...Array(32).keys()],
-    SpAttack: [...Array(32).keys()],
-    SpDefense: [...Array(32).keys()],
-    Speed: [...Array(32).keys()],
+    HP: Array<number>(),
+    Attack: Array<number>(),
+    Defense: Array<number>(),
+    SpAttack: Array<number>(),
+    SpDefense: Array<number>(),
+    Speed: Array<number>(),
+  };
+  const minIVs = {
+    HP: 0,
+    Attack: 0,
+    Defense: 0,
+    SpAttack: 0,
+    SpDefense: 0,
+    Speed: 0,
+  };
+  const maxIVs = {
+    HP: 31,
+    Attack: 31,
+    Defense: 31,
+    SpAttack: 31,
+    SpDefense: 31,
+    Speed: 31,
   };
   for (const stats of statLevels) {
-    for (const [stat, ivRange] of Object.entries(ivRanges)) {
-      for (let i = ivRange.length - 1; i >= 0; i--) {
-        const args: [number, number, number, number, number] = [
-          baseStats[stat],
-          ivRange[i],
-          stats.EV[stat],
-          stats.Level,
-          stat !== 'HP' ? Natures[natureName][stat] : Number(isShedinja),
-        ];
-        if (
-          (stat === 'HP' ? calcHPStat(...args) : calcOtherStat(...args)) !==
-          stats.Stats[stat]
-        ) {
-          ivRange.splice(i, 1);
-        }
+    for (const stat of Object.keys(ivRanges)) {
+      if (Number.isNaN(minIVs[stat]) || Number.isNaN(maxIVs[stat])) {
+        continue;
       }
+      if (isShedinja && stat === 'HP') {
+        continue;
+      }
+      const statCalc = stat === 'HP' ? calcHPStat : calcOtherStat;
+      const lowerBound = statCalc(
+        baseStats[stat],
+        minIVs[stat],
+        stats.EV[stat],
+        stats.Level,
+        Natures[natureName][stat] ?? null,
+      );
+      const upperBound = statCalc(
+        baseStats[stat],
+        maxIVs[stat],
+        stats.EV[stat],
+        stats.Level,
+        Natures[natureName][stat] ?? null,
+      );
+      let minIV: number;
+      let maxIV: number;
+      if (lowerBound <= stats.Stats[stat] && stats.Stats[stat] <= upperBound) {
+        const ivCalc = stat === 'HP' ? calcHPIV : calcOtherStatIV;
+        minIV = Math.min(
+          Math.max(
+            ivCalc(
+              baseStats[stat],
+              stats.EV[stat],
+              stats.Level,
+              stats.Stats[stat],
+              Natures[natureName][stat] ?? null,
+            ),
+            0,
+          ),
+          31,
+        );
+        maxIV = Math.min(
+          Math.max(
+            ivCalc(
+              baseStats[stat],
+              stats.EV[stat],
+              stats.Level,
+              stats.Stats[stat] + 1,
+              Natures[natureName][stat] ?? null,
+            ) - 1,
+            0,
+          ),
+          31,
+        );
+      } else {
+        minIVs[stat] = NaN;
+        maxIVs[stat] = NaN;
+        continue;
+      }
+      if (minIV > minIVs[stat]) {
+        minIVs[stat] = minIV;
+      }
+      if (maxIV < maxIVs[stat]) {
+        maxIVs[stat] = maxIV;
+      }
+    }
+  }
+  for (const [stat, ivRange] of Object.entries(ivRanges)) {
+    for (let iv = minIVs[stat]; iv <= maxIVs[stat]; iv++) {
+      ivRange.push(iv);
     }
   }
   if (hiddenPower !== null) {
@@ -288,19 +385,14 @@ export function calcIVRanges(
           ivRange.splice(i, 1);
         }
       }
+      minIVs[stat] = ivRange[0] ?? NaN;
+      maxIVs[stat] = ivRange[ivRange.length - 1] ?? NaN;
     }
   }
   if (characteristicInput !== null && characteristicInput in Characteristics) {
     const highestStat: Stat = Characteristics[characteristicInput].Stat;
     const ivModulo = Characteristics[characteristicInput].IVModulo;
-    let highestIV = Math.max(
-      ...ivRanges.HP,
-      ...ivRanges.Attack,
-      ...ivRanges.Defense,
-      ...ivRanges.SpAttack,
-      ...ivRanges.SpDefense,
-      ...ivRanges.Speed,
-    );
+    let highestIV = Math.max(...Object.values(maxIVs));
     if (highestIV % 5 > ivModulo) {
       highestIV -= (highestIV % 5) - ivModulo;
     }

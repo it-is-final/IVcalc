@@ -37,6 +37,8 @@ export default function InitialLevelInput({initialLevel, setInitialLevel}: Initi
         {
           htmlInput: {
             type: "number",
+            inputMode: "numeric",
+            pattern: "[0-9]^",
             min: 0,
             max: 100
           }

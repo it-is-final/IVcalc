@@ -50,6 +50,9 @@ export default function StatsInputTextarea({statsInput, setStatsInput, calculati
           width: "100%",
           height: "100%"
         }}
+        autoComplete="false"
+        autoCorrect="false"
+        spellCheck={false}
       />
     </Grid>
   );

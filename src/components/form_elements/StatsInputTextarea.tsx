@@ -46,7 +46,7 @@ export default function StatsInputTextarea({
       <TextField
         multiline
         label="Stats"
-        rows={8}
+        rows={9}
         onChange={handleInput}
         value={statsInput}
         required

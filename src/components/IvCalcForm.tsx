@@ -239,7 +239,7 @@ export default function IvCalcForm() {
   return (
     <Grid container component="form" spacing={1} onSubmit={handleFormSubmit}>
       <Grid size={{ xs: 12, md: 8 }}>
-        <Grid size={12} container spacing={1}>
+        <Grid size={12} container spacing={2}>
           <GenerationSelect
             generation={generation}
             onGenerationChange={handleGenerationChange}
@@ -268,7 +268,7 @@ export default function IvCalcForm() {
             disabled={!hiddenPowerAvailable}
           />
           <Grid size={{ xs: 12, md: 4 }}>
-            <Stack spacing={1}>
+            <Stack spacing={2}>
               <InitialLevelInput
                 initialLevel={initialLevel}
                 setInitialLevel={setInitialLevel}

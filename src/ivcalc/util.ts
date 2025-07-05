@@ -61,7 +61,9 @@ function filterPokemonData(csvData: MonEntry[], generation: Generation) {
       break;
     }
   }
-  return csvData.filter(pokemon => pokemon.number >= 1 && pokemon.number <= nationalDexSize);
+  return csvData.filter(
+    (pokemon) => pokemon.number >= 1 && pokemon.number <= nationalDexSize,
+  );
 }
 
 export async function fetchPokemonData(generation: Generation) {
@@ -93,10 +95,10 @@ export async function fetchPokemonData(generation: Generation) {
       break;
     }
   }
-  const csv = await request.text()
+  const csv = await request.text();
   const parsedCsv = Papa.parse(csv, {
     header: true,
-    transformHeader: header => {
+    transformHeader: (header) => {
       switch (header) {
         case "Number": {
           return "number";
@@ -148,10 +150,18 @@ export async function fetchPokemonData(generation: Generation) {
       }
     },
   }) as Papa.ParseResult<MonEntry>;
-  return pokemonData[generation] = filterPokemonData(parsedCsv.data, generation);
+  return (pokemonData[generation] = filterPokemonData(
+    parsedCsv.data,
+    generation,
+  ));
 }
 
-export function getPokemonForms(currentPokemon: string, pokemonData: MonEntry[]) {
-  const entries = pokemonData.filter(pokemon => pokemon.name === currentPokemon);
-  return entries.map(pokemon => pokemon.form);
+export function getPokemonForms(
+  currentPokemon: string,
+  pokemonData: MonEntry[],
+) {
+  const entries = pokemonData.filter(
+    (pokemon) => pokemon.name === currentPokemon,
+  );
+  return entries.map((pokemon) => pokemon.form);
 }

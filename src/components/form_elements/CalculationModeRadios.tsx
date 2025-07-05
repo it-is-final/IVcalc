@@ -31,11 +31,16 @@ interface CalculationModeRadiosProps {
   setStatsInput: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function CalculationModeRadios({calculationMode, setCalculationMode, statsInput, setStatsInput}: CalculationModeRadiosProps) {
+export default function CalculationModeRadios({
+  calculationMode,
+  setCalculationMode,
+  statsInput,
+  setStatsInput,
+}: CalculationModeRadiosProps) {
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setCalculationMode(e.target.value);
     if (e.target.value === "diff") {
-      fixDiffStatsInput(statsInput, setStatsInput)
+      fixDiffStatsInput(statsInput, setStatsInput);
     }
   }
   return (
@@ -48,16 +53,8 @@ export default function CalculationModeRadios({calculationMode, setCalculationMo
         value={calculationMode}
         onChange={handleChange}
       >
-        <FormControlLabel
-          value="exact"
-          control={<Radio />}
-          label="Exact"
-        />
-        <FormControlLabel
-          value="diff"
-          control={<Radio />}
-          label="Difference"
-        />
+        <FormControlLabel value="exact" control={<Radio />} label="Exact" />
+        <FormControlLabel value="diff" control={<Radio />} label="Difference" />
       </RadioGroup>
     </FormControl>
   );

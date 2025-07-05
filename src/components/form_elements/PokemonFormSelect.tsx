@@ -31,15 +31,18 @@ interface PokemonFormSelectProps {
   pokemonData: MonEntry[];
 }
 
-export default function PokemonFormSelect({pokemon, pokemonForm, setPokemonForm, pokemonData}: PokemonFormSelectProps) {
+export default function PokemonFormSelect({
+  pokemon,
+  pokemonForm,
+  setPokemonForm,
+  pokemonData,
+}: PokemonFormSelectProps) {
   const pokemonForms = getPokemonForms(pokemon, pokemonData);
-  const options = pokemonForms.map(
-    (form) => (
-      <MenuItem key={form} value={form === "" ? "DEFAULT" : form}>
-        {form === "" ? "–" : form}
-      </MenuItem>
-    )
-  );
+  const options = pokemonForms.map((form) => (
+    <MenuItem key={form} value={form === "" ? "DEFAULT" : form}>
+      {form === "" ? "–" : form}
+    </MenuItem>
+  ));
   function handleChange(e: SelectChangeEvent) {
     setPokemonForm(e.target.value === "DEFAULT" ? "" : e.target.value);
   }
@@ -54,8 +57,9 @@ export default function PokemonFormSelect({pokemon, pokemonForm, setPokemonForm,
           onChange={handleChange}
           disabled={!(pokemonData.length > 0 && options.length > 0)}
           value={
-            ((pokemonForms.length > 0) && (pokemonForm === "" ? "DEFAULT" : pokemonForm))
-            || ""
+            (pokemonForms.length > 0 &&
+              (pokemonForm === "" ? "DEFAULT" : pokemonForm)) ||
+            ""
           }
         >
           {options}

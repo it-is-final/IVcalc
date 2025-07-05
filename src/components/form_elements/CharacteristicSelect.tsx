@@ -30,18 +30,25 @@ interface CharacteristicSelectProps {
   disabled: boolean;
 }
 
-export default function CharacteristicSelect({characteristic, setCharacteristic, disabled}: CharacteristicSelectProps) {
-  const options = characteristics.map(characteristic => (
-    <MenuItem key={characteristic} value={characteristic}>{characteristic}</MenuItem>
+export default function CharacteristicSelect({
+  characteristic,
+  setCharacteristic,
+  disabled,
+}: CharacteristicSelectProps) {
+  const options = characteristics.map((characteristic) => (
+    <MenuItem key={characteristic} value={characteristic}>
+      {characteristic}
+    </MenuItem>
   ));
   function handleChange(e: SelectChangeEvent) {
     const maybeCharacteristic = e.target.value;
-    const characteristic = maybeCharacteristic === "NONE"
-                            ? ""
-                            : characteristics.find(
-                              validCharacteristic =>
-                                validCharacteristic === maybeCharacteristic
-                            );
+    const characteristic =
+      maybeCharacteristic === "NONE"
+        ? ""
+        : characteristics.find(
+            (validCharacteristic) =>
+              validCharacteristic === maybeCharacteristic,
+          );
     if (characteristic !== undefined) {
       setCharacteristic(characteristic);
     }

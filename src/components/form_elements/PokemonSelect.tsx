@@ -29,8 +29,13 @@ interface PokemonSelectProps {
   pokemonData: MonEntry[];
 }
 
-export default function PokemonSelect({pokemon, setPokemon, setPokemonForm, pokemonData}: PokemonSelectProps) {
-  const pokemonNames = [...new Set(pokemonData.map(pokemon => pokemon.name))];
+export default function PokemonSelect({
+  pokemon,
+  setPokemon,
+  setPokemonForm,
+  pokemonData,
+}: PokemonSelectProps) {
+  const pokemonNames = [...new Set(pokemonData.map((pokemon) => pokemon.name))];
   function handleChange(_: React.SyntheticEvent, newValue: string | null) {
     if (newValue) {
       setPokemon(newValue);
@@ -41,7 +46,7 @@ export default function PokemonSelect({pokemon, setPokemon, setPokemonForm, poke
       setPokemonForm("");
     }
   }
-  return(
+  return (
     <Grid size={{ xs: 12, md: 4 }}>
       <Autocomplete
         fullWidth
@@ -50,13 +55,8 @@ export default function PokemonSelect({pokemon, setPokemon, setPokemonForm, poke
         onChange={handleChange}
         disabled={!(pokemonData.length > 0)}
         value={pokemon}
-        renderInput={
-          (params) => (
-            <TextField
-              {...params}
-              label="Pokémon"
-              required
-            />
+        renderInput={(params) => (
+          <TextField {...params} label="Pokémon" required />
         )}
       />
     </Grid>

@@ -32,7 +32,7 @@ import {
   type MonEntry,
   type Nature,
   type StatLevel,
-  type NextLevels
+  type NextLevels,
 } from "../ivcalc/data";
 import { fetchPokemonData } from "../ivcalc/util";
 import CalculationModeRadios from "./form_elements/CalculationModeRadios";
@@ -48,7 +48,7 @@ import ConsiderEVsCheckbox from "./form_elements/ConsiderEVsCheckbox";
 import { mapStatLevel } from "./form_elements/formElementUtil";
 import { calcIvRanges, getNextIvLevel } from "../ivcalc/calculate";
 
-export default function IvCalcForm () {
+export default function IvCalcForm() {
   const [isInitialLoad, setisInitialLoad] = useState(true);
   const [generation, setGeneration] = useState<Generation | "">("");
   const [pokemon, setPokemon] = useState("");
@@ -77,12 +77,14 @@ export default function IvCalcForm () {
     defense: null,
     specialAttack: null,
     specialDefense: null,
-    speed: null
+    speed: null,
   });
 
   function handleGenerationChange(e: SelectChangeEvent) {
     const maybeGeneration = e.target.value;
-    const generation = generations.find((validGeneration) => validGeneration === maybeGeneration);
+    const generation = generations.find(
+      (validGeneration) => validGeneration === maybeGeneration,
+    );
     if (generation === undefined) {
       return;
     }
@@ -117,10 +119,9 @@ export default function IvCalcForm () {
 
   function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const speciesData = pokemonData.find(entry => (
-      entry.name === pokemon
-      && entry.form === pokemonForm
-    ));
+    const speciesData = pokemonData.find(
+      (entry) => entry.name === pokemon && entry.form === pokemonForm,
+    );
     if (speciesData === undefined) {
       return;
     }
@@ -130,20 +131,23 @@ export default function IvCalcForm () {
       defense: speciesData.defense,
       specialAttack: speciesData.specialAttack,
       specialDefense: speciesData.specialDefense,
-      speed: speciesData.speed
+      speed: speciesData.speed,
     };
     const statLevels: StatLevel[] = [];
     const rawStatLevels = statsInput
       .split("\n")
-      .map(level =>
-        level.split(" ").map(stat => (stat !== "" ? Number(stat) : null))
+      .map((level) =>
+        level.split(" ").map((stat) => (stat !== "" ? Number(stat) : null)),
       );
     for (const [i, statLevel] of rawStatLevels.entries()) {
       if (statLevel.length === 1 && statLevel.includes(null) && i !== 0) {
         continue;
       }
-      if (statLevel.length !== (considerEVs ? 12 : 6) || statLevel.includes(null)) {
-        alert('Input is incorrectly formatted, please fix this.');
+      if (
+        statLevel.length !== (considerEVs ? 12 : 6) ||
+        statLevel.includes(null)
+      ) {
+        alert("Input is incorrectly formatted, please fix this.");
         return;
       }
       // Hard pass initial stats as 'exact' mode
@@ -152,7 +156,8 @@ export default function IvCalcForm () {
         stats: mapStatLevel(
           statLevel as number[],
           statLevels,
-          i === 0 ? "exact" : calculationMode),
+          i === 0 ? "exact" : calculationMode,
+        ),
         ev: {
           hp: statLevel[6] ?? 0,
           attack: statLevel[7] ?? 0,
@@ -160,7 +165,7 @@ export default function IvCalcForm () {
           specialAttack: statLevel[9] ?? 0,
           specialDefense: statLevel[10] ?? 0,
           speed: statLevel[11] ?? 0,
-        }
+        },
       });
     }
     const calculatedIvs = calcIvRanges(
@@ -169,7 +174,7 @@ export default function IvCalcForm () {
       nature as Nature,
       characteristic,
       hiddenPower,
-      speciesData.number === 292
+      speciesData.number === 292,
     );
     setisInitialLoad(false);
     setResults(calculatedIvs);
@@ -181,7 +186,7 @@ export default function IvCalcForm () {
         statLevels[statLevels.length - 1].ev.hp,
         statLevels[statLevels.length - 1].level,
         nature as Nature,
-        speciesData.number === 292
+        speciesData.number === 292,
       ),
       attack: getNextIvLevel(
         "attack",
@@ -190,7 +195,7 @@ export default function IvCalcForm () {
         statLevels[statLevels.length - 1].ev.attack,
         statLevels[statLevels.length - 1].level,
         nature as Nature,
-        speciesData.number === 292
+        speciesData.number === 292,
       ),
       defense: getNextIvLevel(
         "defense",
@@ -199,7 +204,7 @@ export default function IvCalcForm () {
         statLevels[statLevels.length - 1].ev.defense,
         statLevels[statLevels.length - 1].level,
         nature as Nature,
-        speciesData.number === 292
+        speciesData.number === 292,
       ),
       specialAttack: getNextIvLevel(
         "specialAttack",
@@ -208,7 +213,7 @@ export default function IvCalcForm () {
         statLevels[statLevels.length - 1].ev.specialAttack,
         statLevels[statLevels.length - 1].level,
         nature as Nature,
-        speciesData.number === 292
+        speciesData.number === 292,
       ),
       specialDefense: getNextIvLevel(
         "specialDefense",
@@ -217,7 +222,7 @@ export default function IvCalcForm () {
         statLevels[statLevels.length - 1].ev.specialDefense,
         statLevels[statLevels.length - 1].level,
         nature as Nature,
-        speciesData.number === 292
+        speciesData.number === 292,
       ),
       speed: getNextIvLevel(
         "speed",
@@ -226,7 +231,7 @@ export default function IvCalcForm () {
         statLevels[statLevels.length - 1].ev.speed,
         statLevels[statLevels.length - 1].level,
         nature as Nature,
-        speciesData.number === 292
+        speciesData.number === 292,
       ),
     });
   }
@@ -251,10 +256,7 @@ export default function IvCalcForm () {
             setPokemonForm={setPokemonForm}
             pokemonData={pokemonData}
           />
-          <NatureSelect
-            nature={nature}
-            setNature={setNature}
-          />
+          <NatureSelect nature={nature} setNature={setNature} />
           <CharacteristicSelect
             characteristic={characteristic}
             setCharacteristic={setCharacteristic}
@@ -265,7 +267,7 @@ export default function IvCalcForm () {
             setHiddenPower={setHiddenPower}
             disabled={!hiddenPowerAvailable}
           />
-          <Grid size={{xs: 12, md: 4}}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Stack spacing={1}>
               <InitialLevelInput
                 initialLevel={initialLevel}
@@ -289,11 +291,13 @@ export default function IvCalcForm () {
             calculationMode={calculationMode}
           />
           <Grid size={12}>
-            <Button variant="contained" type="submit" fullWidth>Find</Button>
+            <Button variant="contained" type="submit" fullWidth>
+              Find
+            </Button>
           </Grid>
         </Grid>
       </Grid>
-      <Grid size={{xs: 12, md: 4}}>
+      <Grid size={{ xs: 12, md: 4 }}>
         <IvCalcOutput
           initial={isInitialLoad}
           ivs={results}

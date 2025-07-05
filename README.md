@@ -6,8 +6,8 @@ This is a tool that can calculate the IVs of your Pokémon, rewritten using Reac
 
 ### Prequisites
 
- - Git
- - node.js
+- Git
+- node.js
 
 ### Steps
 
@@ -21,8 +21,8 @@ Instead of using `npm run build`, use `npm run dev`.
 
 ## Acknowledgements
 
- - Base stats data, characteristics data, natures data, and calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)
- - Pokémon © 2002-2024 Pokémon. © 1995-2024 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo.
+- Base stats data, characteristics data, natures data, and calculation formulas is sourced from [Bulbapedia](https://bulbapedia.bulbagarden.net/)
+- Pokémon © 2002-2024 Pokémon. © 1995-2024 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo.
 
 ## License
 

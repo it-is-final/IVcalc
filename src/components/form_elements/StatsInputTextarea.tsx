@@ -27,18 +27,22 @@ interface StatsInputTextareaProps {
   calculationMode: string;
 }
 
-export default function StatsInputTextarea({statsInput, setStatsInput, calculationMode}: StatsInputTextareaProps) {
+export default function StatsInputTextarea({
+  statsInput,
+  setStatsInput,
+  calculationMode,
+}: StatsInputTextareaProps) {
   function handleInput(e: ChangeEvent<HTMLTextAreaElement>) {
-    setStatsInput(e.target.value.replace(/[^0-9\s]+| {2,}| (?=\n)/, ''));
+    setStatsInput(e.target.value.replace(/[^0-9\s]+| {2,}| (?=\n)/, ""));
     if (calculationMode === "diff") {
       fixDiffStatsInput(
-        e.target.value.replace(/[^0-9\s]+| {2,}| (?=\n)/, ''),
-        setStatsInput
+        e.target.value.replace(/[^0-9\s]+| {2,}| (?=\n)/, ""),
+        setStatsInput,
       );
     }
   }
   return (
-    <Grid size={{xs: 12, md: 8}}>
+    <Grid size={{ xs: 12, md: 8 }}>
       <TextField
         multiline
         label="Stats"
@@ -48,7 +52,7 @@ export default function StatsInputTextarea({statsInput, setStatsInput, calculati
         required
         style={{
           width: "100%",
-          height: "100%"
+          height: "100%",
         }}
         autoComplete="false"
         autoCorrect="false"

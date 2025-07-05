@@ -16,8 +16,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { HiddenPower, Nature, Stat, Stats, StatLevel, Characteristic, CalculatedIvs } from "./data";
-import { hiddenPowerTypes, natureModifiers, stats, characteristicsStats } from "./data";
+import type {
+  HiddenPower,
+  Nature,
+  Stat,
+  Stats,
+  StatLevel,
+  Characteristic,
+  CalculatedIvs,
+} from "./data";
+import {
+  hiddenPowerTypes,
+  natureModifiers,
+  stats,
+  characteristicsStats,
+} from "./data";
 
 function calcHpStat(
   baseStat: number,
@@ -26,11 +39,11 @@ function calcHpStat(
   level: number,
   isShedinja: boolean,
 ) {
-  return (
-    (!isShedinja)
-      ? (Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + level + 10)
-      : 1
-  );
+  return !isShedinja
+    ? Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) +
+        level +
+        10
+    : 1;
 }
 
 function calcOtherStat(
@@ -40,7 +53,8 @@ function calcOtherStat(
   level: number,
   natureModifier: 0 | -1 | 1,
 ) {
-  const rawStat = Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5;
+  const rawStat =
+    Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * level) / 100) + 5;
   switch (natureModifier) {
     case 0: {
       return rawStat;
@@ -54,7 +68,12 @@ function calcOtherStat(
   }
 }
 
-function calcMinimumHpIv(baseStat: number, ev: number, level: number, stat: number) {
+function calcMinimumHpIv(
+  baseStat: number,
+  ev: number,
+  level: number,
+  stat: number,
+) {
   return Math.ceil(
     (stat - level - 10) / (level / 100) - 2 * baseStat - Math.floor(ev / 4),
   );
@@ -91,7 +110,7 @@ function narrowByHiddenPower(hiddenPower: HiddenPower) {
     specialAttack: new Set<number>(),
     specialDefense: new Set<number>(),
     speed: new Set<number>(),
-  }
+  };
   // In here, ivLSBs is the binary number formed from
   // hpLSB + 2 * atkLSB + 4 * defLSB + 8 * speLSB + 16 * spaLSB + 32 * spdLSB
   // in the hidden power formula
@@ -141,11 +160,11 @@ export function getNextIvLevel(
   const natureModifier = stat !== "hp" ? natureModifiers[nature][stat] : 0;
   while (
     ivRange
-      .map(iv => (
+      .map((iv) =>
         stat === "hp"
           ? calcHpStat(baseStat, iv, ev, level, isShedinja)
-          : calcOtherStat(baseStat, iv, ev, level, natureModifier)
-      ))
+          : calcOtherStat(baseStat, iv, ev, level, natureModifier),
+      )
       .every((result, _, arr) => result === arr[0])
   ) {
     level += 1;
@@ -159,7 +178,7 @@ export function calcIvRanges(
   nature: Nature,
   characteristic: Characteristic | "",
   hiddenPower: HiddenPower | "",
-  isShedinja: boolean
+  isShedinja: boolean,
 ): CalculatedIvs {
   const ivRanges = {
     hp: Array<number>(),
@@ -176,7 +195,7 @@ export function calcIvRanges(
     specialAttack: 0,
     specialDefense: 0,
     speed: 0,
-  }
+  };
   const maxIvs = {
     hp: 31,
     attack: 31,
@@ -184,7 +203,7 @@ export function calcIvRanges(
     specialAttack: 31,
     specialDefense: 31,
     speed: 31,
-  }
+  };
   for (const statLevel of statLevels) {
     for (const stat of stats) {
       if (isNaN(minIvs[stat]) || isNaN(maxIvs[stat])) {
@@ -201,34 +220,37 @@ export function calcIvRanges(
           minIvs[stat],
           statLevel.ev[stat],
           statLevel.level,
-          isShedinja
-        )
+          isShedinja,
+        );
         upperBound = calcHpStat(
           baseStats[stat],
           maxIvs[stat],
           statLevel.ev[stat],
           statLevel.level,
-          isShedinja
-        )
+          isShedinja,
+        );
       } else {
         lowerBound = calcOtherStat(
           baseStats[stat],
           minIvs[stat],
           statLevel.ev[stat],
           statLevel.level,
-          natureModifiers[nature][stat]
-        )
+          natureModifiers[nature][stat],
+        );
         upperBound = calcOtherStat(
           baseStats[stat],
           maxIvs[stat],
           statLevel.ev[stat],
           statLevel.level,
-          natureModifiers[nature][stat]
-        )
+          natureModifiers[nature][stat],
+        );
       }
       let minIv: number;
       let maxIv: number;
-      if (lowerBound <= statLevel.stats[stat] && statLevel.stats[stat] <= upperBound) {
+      if (
+        lowerBound <= statLevel.stats[stat] &&
+        statLevel.stats[stat] <= upperBound
+      ) {
         if (stat === "hp") {
           minIv = Math.min(
             Math.max(
@@ -329,8 +351,8 @@ export function calcIvRanges(
       const ivRange = ivRanges[stat];
       for (let i = ivRange.length - 1; i >= 0; i--) {
         if (
-          (stat === highestStat && ivRange[i] % 5 !== ivModulo)
-          || ivRange[i] > highestIv
+          (stat === highestStat && ivRange[i] % 5 !== ivModulo) ||
+          ivRange[i] > highestIv
         ) {
           ivRange.splice(i, 1);
         }

@@ -29,17 +29,15 @@ interface GenerationSelectProps {
   onGenerationChange: (e: SelectChangeEvent) => void;
 }
 
-export default function GenerationSelect(
-  {
-    generation,
-    onGenerationChange
-  }: GenerationSelectProps
-) {
-  const options = generations.map(
-    generation => (
-      <MenuItem value={generation} key={generation}>{generation}</MenuItem>
-    )
-  );
+export default function GenerationSelect({
+  generation,
+  onGenerationChange,
+}: GenerationSelectProps) {
+  const options = generations.map((generation) => (
+    <MenuItem value={generation} key={generation}>
+      {generation}
+    </MenuItem>
+  ));
   return (
     <Grid size={{ xs: 12, md: 4 }}>
       <FormControl fullWidth>

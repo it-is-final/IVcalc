@@ -36,30 +36,28 @@ function formatOutputIvs(ivRange: number[]) {
     return null;
   }
   if (
-    ivRange.every((iv, index, arr) => iv === arr[0] || iv === arr[index - 1] + 1)
-    && ivRange.length > 1
+    ivRange.every(
+      (iv, index, arr) => iv === arr[0] || iv === arr[index - 1] + 1,
+    ) &&
+    ivRange.length > 1
   ) {
     return `${ivRange[0]}–${ivRange[ivRange.length - 1]}`;
   }
   return ivRange.join(", ");
 }
 
-export default function IvCalcOutput({initial, ivs, nextLevels}: IvCalcOutputProps) {
-  const statTable = stats.map(stat => (
+export default function IvCalcOutput({
+  initial,
+  ivs,
+  nextLevels,
+}: IvCalcOutputProps) {
+  const statTable = stats.map((stat) => (
     <TableRow key={stat}>
       <TableCell component="th">{statNames[stat]}</TableCell>
       <TableCell>
-        {
-          formatOutputIvs(ivs[stat])
-          ?? (!initial && "Invalid")
-        }
+        {formatOutputIvs(ivs[stat]) ?? (!initial && "Invalid")}
       </TableCell>
-      <TableCell>
-        {
-          nextLevels[stat]
-          ?? (!initial && "Invalid")
-        }
-      </TableCell>
+      <TableCell>{nextLevels[stat] ?? (!initial && "Invalid")}</TableCell>
     </TableRow>
   ));
   return (
@@ -72,9 +70,7 @@ export default function IvCalcOutput({initial, ivs, nextLevels}: IvCalcOutputPro
             <TableCell>{"Next level"}</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {statTable}
-        </TableBody>
+        <TableBody>{statTable}</TableBody>
       </Table>
     </TableContainer>
   );

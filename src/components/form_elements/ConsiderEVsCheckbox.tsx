@@ -24,8 +24,19 @@ interface ConsiderEVsCheckboxProps {
   setConsiderEVs: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ConsiderEVsCheckbox({considerEVs, setConsiderEVs}: ConsiderEVsCheckboxProps) {
+export default function ConsiderEVsCheckbox({
+  considerEVs,
+  setConsiderEVs,
+}: ConsiderEVsCheckboxProps) {
   return (
-    <FormControlLabel control={<Checkbox checked={considerEVs} onChange={(e) => setConsiderEVs(e.target.checked)} />} label="Consider EVs" />
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={considerEVs}
+          onChange={(e) => setConsiderEVs(e.target.checked)}
+        />
+      }
+      label="Consider EVs"
+    />
   );
 }

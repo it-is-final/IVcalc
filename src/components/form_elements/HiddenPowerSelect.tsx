@@ -30,18 +30,24 @@ interface HiddenPowerSelectProps {
   disabled: boolean;
 }
 
-export default function HiddenPowerSelect({hiddenPower, setHiddenPower, disabled}: HiddenPowerSelectProps) {
-  const options = hiddenPowers.map(hiddenPower => (
-    <MenuItem key={hiddenPower} value={hiddenPower}>{hiddenPower}</MenuItem>
+export default function HiddenPowerSelect({
+  hiddenPower,
+  setHiddenPower,
+  disabled,
+}: HiddenPowerSelectProps) {
+  const options = hiddenPowers.map((hiddenPower) => (
+    <MenuItem key={hiddenPower} value={hiddenPower}>
+      {hiddenPower}
+    </MenuItem>
   ));
   function handleChange(e: SelectChangeEvent) {
     const maybeHiddenPower = e.target.value;
-    const hiddenPower = maybeHiddenPower === "NONE"
-                            ? ""
-                            : hiddenPowers.find(
-                              validHiddenPower =>
-                                validHiddenPower === maybeHiddenPower
-                            );
+    const hiddenPower =
+      maybeHiddenPower === "NONE"
+        ? ""
+        : hiddenPowers.find(
+            (validHiddenPower) => validHiddenPower === maybeHiddenPower,
+          );
     if (hiddenPower !== undefined) {
       setHiddenPower(hiddenPower);
     }

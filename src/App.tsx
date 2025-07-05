@@ -25,7 +25,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 const theme = createTheme({
   colorSchemes: {
     dark: true,
-  }
+  },
 });
 
 export default function App() {

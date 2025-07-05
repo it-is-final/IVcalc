@@ -26,16 +26,18 @@ import type { Nature } from "../../ivcalc/data";
 
 interface NatureSelectProps {
   nature: Nature | "";
-  setNature: React.Dispatch<React.SetStateAction<Nature | "">>
+  setNature: React.Dispatch<React.SetStateAction<Nature | "">>;
 }
 
-export default function NatureSelect({nature, setNature}: NatureSelectProps) {
-  const options = natures.map(nature => (
-    <MenuItem key={nature} value={nature}>{nature}</MenuItem>
+export default function NatureSelect({ nature, setNature }: NatureSelectProps) {
+  const options = natures.map((nature) => (
+    <MenuItem key={nature} value={nature}>
+      {nature}
+    </MenuItem>
   ));
   function handleChange(e: SelectChangeEvent) {
     const maybeNature = e.target.value;
-    const nature = natures.find(validNature => validNature === maybeNature);
+    const nature = natures.find((validNature) => validNature === maybeNature);
     if (nature !== undefined) {
       setNature(nature);
     }

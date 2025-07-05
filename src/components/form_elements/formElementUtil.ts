@@ -18,11 +18,18 @@
 
 import { stats, type StatLevel } from "../../ivcalc/data";
 
-export function fixDiffStatsInput(statsInput: string, setStatsInput: React.Dispatch<React.SetStateAction<string>>) {
+export function fixDiffStatsInput(
+  statsInput: string,
+  setStatsInput: React.Dispatch<React.SetStateAction<string>>,
+) {
   setStatsInput(statsInput.replace(/(?<=^)\n/gm, ""));
 }
 
-export function mapStatLevel(statLevel: number[], statLevels: StatLevel[], calcMode: string) {
+export function mapStatLevel(
+  statLevel: number[],
+  statLevels: StatLevel[],
+  calcMode: string,
+) {
   const statLevelIndex = {
     hp: 0,
     attack: 1,
@@ -38,7 +45,7 @@ export function mapStatLevel(statLevel: number[], statLevels: StatLevel[], calcM
     specialAttack: 0,
     specialDefense: 0,
     speed: 0,
-  }
+  };
   for (const stat of stats) {
     const input = statLevel[statLevelIndex[stat]];
     switch (calcMode) {

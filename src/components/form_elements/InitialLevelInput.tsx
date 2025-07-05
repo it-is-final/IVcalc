@@ -24,7 +24,10 @@ interface InitialLevelInputProps {
   setInitialLevel: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function InitialLevelInput({initialLevel, setInitialLevel}: InitialLevelInputProps) {
+export default function InitialLevelInput({
+  initialLevel,
+  setInitialLevel,
+}: InitialLevelInputProps) {
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setInitialLevel(Math.min(Math.max(parseInt(e.target.value, 10), 1), 100));
   }
@@ -33,17 +36,15 @@ export default function InitialLevelInput({initialLevel, setInitialLevel}: Initi
       label="Initial Level"
       value={initialLevel}
       onChange={handleChange}
-      slotProps={
-        {
-          htmlInput: {
-            type: "number",
-            inputMode: "numeric",
-            pattern: "[0-9]^",
-            min: 0,
-            max: 100
-          }
-        }
-      }
+      slotProps={{
+        htmlInput: {
+          type: "number",
+          inputMode: "numeric",
+          pattern: "[0-9]^",
+          min: 0,
+          max: 100,
+        },
+      }}
     />
   );
 }

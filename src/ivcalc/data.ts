@@ -16,17 +16,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export const generations = [
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9"
-] as const;
+export const generations = ["3", "4", "5", "6", "7", "8", "9"] as const;
 
-export type Generation = typeof generations[number];
+export type Generation = (typeof generations)[number];
 
 export const stats = [
   "hp",
@@ -38,15 +30,15 @@ export const stats = [
 ] as const;
 
 export const statNames = {
-  "hp": "HP",
-  "attack": "Attack",
-  "defense": "Defense",
-  "specialAttack": "Sp.Attack",
-  "specialDefense": "Sp.Defense",
-  "speed": "Speed"
+  hp: "HP",
+  attack: "Attack",
+  defense: "Defense",
+  specialAttack: "Sp.Attack",
+  specialDefense: "Sp.Defense",
+  speed: "Speed",
 } as const;
 
-export type Stat = typeof stats[number];
+export type Stat = (typeof stats)[number];
 
 export interface Stats {
   hp: number;
@@ -67,12 +59,12 @@ export interface NextLevels {
 }
 
 export interface CalculatedIvs {
-  hp: number[],
-  attack: number[],
-  defense: number[],
-  specialAttack: number[],
-  specialDefense: number[],
-  speed: number[],
+  hp: number[];
+  attack: number[];
+  defense: number[];
+  specialAttack: number[];
+  specialDefense: number[];
+  speed: number[];
 }
 
 export interface StatLevel {
@@ -121,7 +113,7 @@ export const natures = [
   "Quirky",
 ] as const;
 
-export type Nature = typeof natures[number];
+export type Nature = (typeof natures)[number];
 
 export const hiddenPowers = [
   "Fighting",
@@ -142,7 +134,7 @@ export const hiddenPowers = [
   "Dark",
 ] as const;
 
-export type HiddenPower = typeof hiddenPowers[number];
+export type HiddenPower = (typeof hiddenPowers)[number];
 
 export const characteristics = [
   "Loves to eat",
@@ -177,34 +169,184 @@ export const characteristics = [
   "Somewhat stubborn",
 ] as const;
 
-export type Characteristic = typeof characteristics[number];
+export type Characteristic = (typeof characteristics)[number];
 
 export const natureModifiers = {
-  Hardy: { attack: 0, defense: 0, speed: 0, specialAttack: 0, specialDefense: 0 },
-  Lonely: { attack: 1, defense: -1, speed: 0, specialAttack: 0, specialDefense: 0 },
-  Brave: { attack: 1, defense: 0, speed: -1, specialAttack: 0, specialDefense: 0 },
-  Adamant: { attack: 1, defense: 0, speed: 0, specialAttack: -1, specialDefense: 0 },
-  Naughty: { attack: 1, defense: 0, speed: 0, specialAttack: 0, specialDefense: -1 },
-  Bold: { attack: -1, defense: 1, speed: 0, specialAttack: 0, specialDefense: 0 },
-  Docile: { attack: 0, defense: 0, speed: 0, specialAttack: 0, specialDefense: 0 },
-  Relaxed: { attack: 0, defense: 1, speed: -1, specialAttack: 0, specialDefense: 0 },
-  Impish: { attack: 0, defense: 1, speed: 0, specialAttack: -1, specialDefense: 0 },
-  Lax: { attack: 0, defense: 1, speed: 0, specialAttack: 0, specialDefense: -1 },
-  Timid: { attack: -1, defense: 0, speed: 1, specialAttack: 0, specialDefense: 0 },
-  Hasty: { attack: 0, defense: -1, speed: 1, specialAttack: 0, specialDefense: 0 },
-  Serious: { attack: 0, defense: 0, speed: 0, specialAttack: 0, specialDefense: 0 },
-  Jolly: { attack: 0, defense: 0, speed: 1, specialAttack: -1, specialDefense: 0 },
-  Naive: { attack: 0, defense: 0, speed: 1, specialAttack: 0, specialDefense: -1 },
-  Modest: { attack: -1, defense: 0, speed: 0, specialAttack: 1, specialDefense: 0 },
-  Mild: { attack: 0, defense: -1, speed: 0, specialAttack: 1, specialDefense: 0 },
-  Quiet: { attack: 0, defense: 0, speed: -1, specialAttack: 1, specialDefense: 0 },
-  Bashful: { attack: 0, defense: 0, speed: 0, specialAttack: 0, specialDefense: 0 },
-  Rash: { attack: 0, defense: 0, speed: 0, specialAttack: 1, specialDefense: -1 },
-  Calm: { attack: -1, defense: 0, speed: 0, specialAttack: 0, specialDefense: 1 },
-  Gentle: { attack: 0, defense: -1, speed: 0, specialAttack: 0, specialDefense: 1 },
-  Sassy: { attack: 0, defense: 0, speed: -1, specialAttack: 0, specialDefense: 1 },
-  Careful: { attack: 0, defense: 0, speed: 0, specialAttack: -1, specialDefense: 1 },
-  Quirky: { attack: 0, defense: 0, speed: 0, specialAttack: 0, specialDefense: 0 },
+  Hardy: {
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Lonely: {
+    attack: 1,
+    defense: -1,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Brave: {
+    attack: 1,
+    defense: 0,
+    speed: -1,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Adamant: {
+    attack: 1,
+    defense: 0,
+    speed: 0,
+    specialAttack: -1,
+    specialDefense: 0,
+  },
+  Naughty: {
+    attack: 1,
+    defense: 0,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: -1,
+  },
+  Bold: {
+    attack: -1,
+    defense: 1,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Docile: {
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Relaxed: {
+    attack: 0,
+    defense: 1,
+    speed: -1,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Impish: {
+    attack: 0,
+    defense: 1,
+    speed: 0,
+    specialAttack: -1,
+    specialDefense: 0,
+  },
+  Lax: {
+    attack: 0,
+    defense: 1,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: -1,
+  },
+  Timid: {
+    attack: -1,
+    defense: 0,
+    speed: 1,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Hasty: {
+    attack: 0,
+    defense: -1,
+    speed: 1,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Serious: {
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Jolly: {
+    attack: 0,
+    defense: 0,
+    speed: 1,
+    specialAttack: -1,
+    specialDefense: 0,
+  },
+  Naive: {
+    attack: 0,
+    defense: 0,
+    speed: 1,
+    specialAttack: 0,
+    specialDefense: -1,
+  },
+  Modest: {
+    attack: -1,
+    defense: 0,
+    speed: 0,
+    specialAttack: 1,
+    specialDefense: 0,
+  },
+  Mild: {
+    attack: 0,
+    defense: -1,
+    speed: 0,
+    specialAttack: 1,
+    specialDefense: 0,
+  },
+  Quiet: {
+    attack: 0,
+    defense: 0,
+    speed: -1,
+    specialAttack: 1,
+    specialDefense: 0,
+  },
+  Bashful: {
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
+  Rash: {
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    specialAttack: 1,
+    specialDefense: -1,
+  },
+  Calm: {
+    attack: -1,
+    defense: 0,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 1,
+  },
+  Gentle: {
+    attack: 0,
+    defense: -1,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 1,
+  },
+  Sassy: {
+    attack: 0,
+    defense: 0,
+    speed: -1,
+    specialAttack: 0,
+    specialDefense: 1,
+  },
+  Careful: {
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    specialAttack: -1,
+    specialDefense: 1,
+  },
+  Quirky: {
+    attack: 0,
+    defense: 0,
+    speed: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+  },
 } as const;
 
 export const characteristicsStats = {

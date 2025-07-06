@@ -43,7 +43,7 @@ export default function NatureSelect({ nature, setNature }: NatureSelectProps) {
     }
   }
   return (
-    <Grid size={{ xs: 12, md: 4 }}>
+    <Grid size={{ xs: 12, sm: 4 }}>
       <FormControl fullWidth>
         <InputLabel id="nature-select-label">Nature</InputLabel>
         <Select

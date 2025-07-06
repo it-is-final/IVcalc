@@ -39,7 +39,7 @@ export default function GenerationSelect({
     </MenuItem>
   ));
   return (
-    <Grid size={{ xs: 12, md: 4 }}>
+    <Grid size={{ xs: 12, sm: 4 }}>
       <FormControl fullWidth>
         <InputLabel id="generation-select-label">Generation</InputLabel>
         <Select

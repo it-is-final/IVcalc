@@ -47,7 +47,7 @@ export default function PokemonFormSelect({
     setPokemonForm(e.target.value === "DEFAULT" ? "" : e.target.value);
   }
   return (
-    <Grid size={{ xs: 12, md: 4 }}>
+    <Grid size={{ xs: 12, sm: 4 }}>
       <FormControl fullWidth>
         <InputLabel id="pokemon-form-select-label">Form</InputLabel>
         <Select

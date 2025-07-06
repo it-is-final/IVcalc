@@ -42,7 +42,7 @@ export default function StatsInputTextarea({
     }
   }
   return (
-    <Grid size={{ xs: 12, md: 8 }}>
+    <Grid size={{ xs: 12, sm: 8 }}>
       <TextField
         multiline
         label="Stats"

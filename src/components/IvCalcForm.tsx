@@ -267,7 +267,7 @@ export default function IvCalcForm() {
             setHiddenPower={setHiddenPower}
             disabled={!hiddenPowerAvailable}
           />
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Stack spacing={2}>
               <InitialLevelInput
                 initialLevel={initialLevel}

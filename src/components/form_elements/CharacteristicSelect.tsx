@@ -54,7 +54,7 @@ export default function CharacteristicSelect({
     }
   }
   return (
-    <Grid size={{ xs: 12, md: 4 }}>
+    <Grid size={{ xs: 12, sm: 4 }}>
       <FormControl fullWidth>
         <InputLabel id="characteristic-select-label">Characteristic</InputLabel>
         <Select

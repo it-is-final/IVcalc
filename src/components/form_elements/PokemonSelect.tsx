@@ -47,7 +47,7 @@ export default function PokemonSelect({
     }
   }
   return (
-    <Grid size={{ xs: 12, md: 4 }}>
+    <Grid size={{ xs: 12, sm: 4 }}>
       <Autocomplete
         fullWidth
         disablePortal

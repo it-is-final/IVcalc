@@ -53,7 +53,7 @@ export default function HiddenPowerSelect({
     }
   }
   return (
-    <Grid size={{ xs: 12, md: 4 }}>
+    <Grid size={{ xs: 12, sm: 4 }}>
       <FormControl fullWidth>
         <InputLabel id="hidden-power-select-label">Hidden Power</InputLabel>
         <Select

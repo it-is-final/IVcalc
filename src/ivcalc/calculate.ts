@@ -121,7 +121,7 @@ function narrowByHiddenPower(hiddenPower: HiddenPower) {
     0,
   );
   const maxIvLsbs = Math.min(
-    Math.ceil(hiddenPowerTypes[hiddenPower] / (15 / 63)),
+    Math.ceil((hiddenPowerTypes[hiddenPower] + 1) / (15 / 63)) - 1,
     63,
   );
   for (let ivLsbs = minIvLsbs; ivLsbs <= maxIvLsbs; ivLsbs++) {

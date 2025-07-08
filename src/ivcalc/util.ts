@@ -18,16 +18,11 @@
 
 import Papa from "papaparse";
 import type { Generation, MonEntry } from "./data.ts";
-
-const pokemonData = {
-  "3": null as MonEntry[] | null,
-  "4": null as MonEntry[] | null,
-  "5": null as MonEntry[] | null,
-  "6": null as MonEntry[] | null,
-  "7": null as MonEntry[] | null,
-  "8": null as MonEntry[] | null,
-  "9": null as MonEntry[] | null,
-};
+import gen35data from "../assets/pkmn_g3-g5.csv?raw";
+import gen6data from "../assets/pkmn_g3-g5.csv?raw";
+import gen7data from "../assets/pkmn_g3-g5.csv?raw";
+import gen8data from "../assets/pkmn_g3-g5.csv?raw";
+import gen9data from "../assets/pkmn_g3-g5.csv?raw";
 
 function filterPokemonData(csvData: MonEntry[], generation: Generation) {
   let nationalDexSize: number;
@@ -66,36 +61,32 @@ function filterPokemonData(csvData: MonEntry[], generation: Generation) {
   );
 }
 
-export async function fetchPokemonData(generation: Generation) {
-  if (pokemonData[generation] !== null) {
-    return pokemonData[generation];
-  }
-  let request;
+function processPokemonDataCsv(generation: Generation) {
+  let csv;
   switch (generation) {
     case "3":
     case "4":
     case "5": {
-      request = await fetch("./assets/pkmn_g3-g5.csv");
+      csv = gen35data;
       break;
     }
     case "6": {
-      request = await fetch("./assets/pkmn_g6.csv");
+      csv = gen6data;
       break;
     }
     case "7": {
-      request = await fetch("./assets/pkmn_g7.csv");
+      csv = gen7data;
       break;
     }
     case "8": {
-      request = await fetch("./assets/pkmn_g8.csv");
+      csv = gen8data;
       break;
     }
     case "9": {
-      request = await fetch("./assets/pkmn_g9.csv");
+      csv = gen9data;
       break;
     }
   }
-  const csv = await request.text();
   const parsedCsv = Papa.parse(csv, {
     header: true,
     transformHeader: (header) => {
@@ -150,10 +141,21 @@ export async function fetchPokemonData(generation: Generation) {
       }
     },
   }) as Papa.ParseResult<MonEntry>;
-  return (pokemonData[generation] = filterPokemonData(
-    parsedCsv.data,
-    generation,
-  ));
+  return filterPokemonData(parsedCsv.data, generation);
+}
+
+const pokemonData = {
+  "3": processPokemonDataCsv("3"),
+  "4": processPokemonDataCsv("4"),
+  "5": processPokemonDataCsv("5"),
+  "6": processPokemonDataCsv("6"),
+  "7": processPokemonDataCsv("7"),
+  "8": processPokemonDataCsv("8"),
+  "9": processPokemonDataCsv("9"),
+};
+
+export function fetchPokemonData(generation: Generation) {
+  return pokemonData[generation];
 }
 
 export function getPokemonForms(

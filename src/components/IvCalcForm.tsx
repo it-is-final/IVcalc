@@ -114,7 +114,7 @@ export default function IvCalcForm() {
         break;
       }
     }
-    fetchPokemonData(generation).then(setPokemonData);
+    setPokemonData(fetchPokemonData(generation));
   }
 
   function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
